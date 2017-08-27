@@ -18,7 +18,7 @@ var LightMap = function(game) {
 	/**
 	 * Inherit the constructor from the PIXI.ParticleContainer object
 	 */
-	PIXI.ParticleContainer.call(this, null, {
+	PIXI.ParticleContainer.call(this, 15000, {
         alpha: true
     });
 
