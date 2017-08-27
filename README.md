@@ -55,22 +55,21 @@ Every room is now a plain old square. I would like to see some more variation in
 
 ## How to Build
 
-I provide a fully compiled version of the game in the `dist` folder. Both plain and minified formats are in there.
-
 Install NPM if you haven't already done so. NPM is a package manager that ships with Node.js. Then open up your console and navigate to the root folder of this project.
 
 Run `npm install` once to install all the dependencies needed by this project. Next there are a few options:
 
-Run `grunt build` to perform a new build to the `dist` folder. This way Browserify will generate a bundle from every required script in the `lib` folder, this will also generate a minified file of the bundle. This is preferred when you are done developing and want to push your new changes, as this version doesn't include the debug map.
+Run `npm run build` to perform a new build to the `dist` folder. This way Webpack will generate a bundle from every required script in the `scripts` folder.
 
-Run `grunt dev` to watch every module needed in the project for changes. Watchify will take care of rebuilding the bundle so the only thing you have to do is refresh your browser. No need to run `grunt build` everytime you make a change. This version includes a debug map so you are able to debug single files while the .js file included is still the bundle file.
+Run `npm run start` to watch every module needed in the project for changes. The Webpack Dev Server will take care of rebuilding the bundle. You don't even need to refresh your browser - script will do it for you. No need to run `npm run build` everytime you make a change.
 
-Run `grunt debug` to let JSHint check the code for you, a tool that helps to detect errors and potential problems in your JavaScript code.
+Both versions provide a debug map so you are able to debug single files while the .js file included is still the bundle file.
 
 ## Changelog
 
 **v0.6.7**
 
+- Replaced Grunt by Webpack and reorganized project structure
 - Entities can now be limited to attacking specific entity types
 
 **v0.6.6**
