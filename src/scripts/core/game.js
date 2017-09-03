@@ -197,6 +197,11 @@ Game.prototype = {
 		this.map.entities.add(sword);
 		var startingSwordTile = this.map.tiles[this.map.entrance.x + 1][this.map.entrance.y];
 		startingSwordTile.add(sword);
+		
+		var sword2 = ItemFactory.newSword(this, new Vector2(this.map.entrance.x + 1, this.map.entrance.y));
+		this.map.entities.add(sword2);
+		var startingSword2Tile = this.map.tiles[this.map.entrance.x - 1][this.map.entrance.y];
+		startingSwordTile.add(sword2);
 
 		//Initialize the movement system
 		this.staticSystems.movementSystem = new Movement(this);
@@ -289,7 +294,17 @@ Game.prototype = {
             "up": 87,
             "down": 83,
             "pickup": 69,
-            "wait": 32
+            "dropdown": 82,
+			"wait": 32,
+			"equip1": 49,
+			"equip2": 50,
+			"equip3": 51,
+			"equip4": 52,
+			"equip5": 53,
+			"equip6": 54,
+			"equip7": 55,
+			"equip8": 56,
+			"equip9": 57,
         };
 
         //Create the player entity

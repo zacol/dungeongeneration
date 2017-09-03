@@ -69,61 +69,61 @@ KeyboardControl.prototype = {
 				switch(key) {
 
 					case("left"):
-
-						//Add up key and tell it to move the entities up when it hits
-						var leftKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the new position function to the keydown event
-						leftKey.onDown.on(this.controls[key], this.newPosition.bind(this, "left"), this);
-
-						break;
-
 					case("right"):
-
-						//Add up key and tell it to move the entities up when it hits
-						var rightKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the new position function to the keydown event
-						rightKey.onDown.on(this.controls[key], this.newPosition.bind(this, "right"), this);
-
-						break;
-
 					case("up"):
-
-						//Add up key and tell it to move the entities up when it hits
-						var upKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the new position function to the keydown event
-						upKey.onDown.on(this.controls[key], this.newPosition.bind(this, "up"), this);
-
-						break;
-
 					case("down"):
 
 						//Add up key and tell it to move the entities up when it hits
-						var downKey = this.keyboard.getKey(this.controls[key]);
+						var directionKey = this.keyboard.getKey(this.controls[key]);
 
 						//Attach the new position function to the keydown event
-						downKey.onDown.on(this.controls[key], this.newPosition.bind(this, "down"), this);
-
+						directionKey.onDown.on(this.controls[key], this.newPosition.bind(this, key), this);
 						break;
 
 					case("pickup"):
 
-						//Add up key and tell it to move the entities up when it hits
+						//Add up key and tell it to pick up the entities when it hits
 						var pickUpKey = this.keyboard.getKey(this.controls[key]);
 
-						//Attach the new position function to the keydown event
+						//Attach the pick up function to the keydown event
 						pickUpKey.onDown.on(this.controls[key], this.pickUp.bind(this), this);
+
+						break;
+					
+					case("dropdown"):
+
+						//Add up key and tell it to drop down the entities when it hits
+						var dropDownKey = this.keyboard.getKey(this.controls[key]);
+
+						//Attach the drop down function to the keydown event
+						dropDownKey.onDown.on(this.controls[key], this.dropDown.bind(this), this);
+
+						break;
+					
+					case("equip1"):
+					case("equip2"):
+					case("equip3"):
+					case("equip4"):
+					case("equip5"):
+					case("equip6"):
+					case("equip7"):
+					case("equip8"):
+					case("equip9"):
+
+						//Add up key and tell it to equip the entities when it hits
+						var equipKey = this.keyboard.getKey(this.controls[key]);
+
+						//Attach the equip function to the keydown event
+						equipKey.onDown.on(this.controls[key], this.equip.bind(this, key), this);
 
 						break;
 
 					case("wait"):
 
-						//Add up key and tell it to move the entities up when it hits
+						//Add up key and tell it to wait the entities when it hits
 						var waitKey = this.keyboard.getKey(this.controls[key]);
 
-						//Attach the new position function to the keydown event
+						//Attach the wait function to the keydown event
 						waitKey.onDown.on(this.controls[key], this.wait.bind(this), this);
 
 						break;
@@ -207,6 +207,37 @@ KeyboardControl.prototype = {
 
 		//Tell the inventory system to handle a pickup for this entity
 		this.game.staticSystems.inventorySystem.pickUp(this.entity, false);
+
+	},
+	
+	/**
+	 * Function that is bound to the 'dropdown' key and gets
+	 * executed every time the user presses it.
+	 * @protected
+	 */
+	dropDown: function() {
+
+		//Tell the inventory system to handle a dropdown for this entity
+		this.game.staticSystems.inventorySystem.dropDown(this.entity);
+
+	},
+
+	/**
+	 * The function that gets called when a player equips item
+	 * @protected
+	 *
+	 * @param {String} slot - The slot from quickslot bar the entities are being equiped
+	 */
+	equip: function(slot) {
+
+		//Get text correspondent to this slot
+		var text = slot.substr(slot.length - 1);
+		
+		//Get index correspondent with this slot
+		var index = parseInt(text) - 1;
+
+		//Tell the inventory system to handle a equip for this entity
+		this.game.staticSystems.inventorySystem.equip(this.entity, index);
 
 	},
 

@@ -75,14 +75,14 @@ CanPickUp.prototype = {
     },
 
     /**
-     * Function to determine if an entity can be attacked by this entity
+     * Function to determine if an entity can be picked by this entity
      * @protected
      *
      * @param {Entity} entity - The entity being checked
      */
     canEntityPickUp: function (entity) {
 
-        //An empty array of attack types means any entity type may be attacked
+        //An empty array of pick types means any entity type may be pick this enity
         if (this.canPickUpTypes.length === 0) {
             return true;
         }

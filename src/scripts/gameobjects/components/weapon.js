@@ -24,5 +24,17 @@ var Weapon = function(damage) {
 
 };
 
+/**
+ * Update damage caused by this entity
+ * @protected
+ *
+ * @param {Number} damage - The new damage that is caused by this entity
+ */
+Weapon.prototype.update = function(damage) {
+
+	this.damage = damage;
+
+}
+
 //Export the Browserify module
 module.exports = Weapon;

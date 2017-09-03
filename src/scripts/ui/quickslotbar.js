@@ -85,5 +85,95 @@ QuickslotBar.prototype.initialize = function() {
 
 };
 
+
+QuickslotBar.prototype.add = function(entity) {
+
+	//Get the inventory component from the player entity and store it temporarily in a variable
+	var inventoryComponent = this.game.player.getComponent("inventory");
+
+	//Calculate the base position of the quickslot container
+	var basePosition = new Vector2((this.game.sizeManager.width / 2) - (this.maxQuickslots * 44) - 21, this.game.sizeManager.height - 57);
+
+	//Calculate the new position of the item
+	var nextSlot = inventoryComponent.slots.length - 1;
+	var itemPosition = new Vector2(nextSlot * 44, 0);
+	var newPosition = itemPosition.combine(basePosition);
+
+	//Create the texture from an image path
+	var texture = PIXI.Texture.fromFrame(entity.textureName);
+
+	//Create a new Sprite using the texture
+	var item = new PIXI.Sprite(texture);
+
+	//Set the new position to the item
+	item.position.x = newPosition.x;
+	item.position.y = newPosition.y;
+
+	//Set the image transparency
+	item.alpha = 0.5;
+
+	//Scale the image up 3 times
+	item.scale = new PIXI.Point(3, 3);
+
+	//Add the item object to the container
+	this.addChild(item);
+};
+
+QuickslotBar.prototype.remove = function(entityIndex) {
+
+	//Get the inventory component from the player entity and store it temporarily in a variable
+	var inventoryComponent = this.game.player.getComponent("inventory");
+
+	// Number of max quickslots is multiplied by two because of 
+	// container contains the same amount of quickslot textures
+	// and texts assign to them
+	var item = this.getChildAt(this.maxQuickslots * 2 + entityIndex);
+
+	// Remove item
+	this.removeChild(item);
+
+	// Iterate through all items in the inventory component
+	for(var i = 0; i < inventoryComponent.slots.length; i++) {
+
+		//Calculate the base position of the quickslot container
+		var basePosition = new Vector2((this.game.sizeManager.width / 2) - (this.maxQuickslots * 44) - 21, this.game.sizeManager.height - 57);
+
+		//Calculate the new position of the item
+		var itemPosition = new Vector2(i * 44, 0);
+		var newPosition = itemPosition.combine(basePosition);
+
+		item = this.getChildAt(this.maxQuickslots * 2 + i);
+
+		//Set the new position to the item
+		item.position.x = newPosition.x;
+
+	}
+
+}
+
+QuickslotBar.prototype.highlight = function(entityIndex) {
+
+	//Get the inventory component from the player entity and store it temporarily in a variable
+	var inventoryComponent = this.game.player.getComponent("inventory");
+
+	// Iterate through all items in the inventory component
+	for(var i = 0; i < inventoryComponent.slots.length; i++) {
+
+		// Number of max quickslots is multiplied by two because of 
+		// container contains the same amount of quickslot textures
+		// and texts assign to them
+		var item = this.getChildAt(this.maxQuickslots * 2 + i);
+
+		//Set the proper alpha transparency
+		if (i === entityIndex) {
+			item.alpha = 1;
+		} else {
+			item.alpha = 0.5;
+		}
+
+	}
+
+}
+
 //Export the Browserify module
 module.exports = QuickslotBar;
