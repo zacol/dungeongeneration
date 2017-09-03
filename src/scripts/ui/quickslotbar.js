@@ -96,7 +96,7 @@ QuickslotBar.prototype.add = function(entity) {
 
 	//Calculate the new position of the item
 	var nextSlot = inventoryComponent.slots.length - 1;
-	var itemPosition = new Vector2(nextSlot * 44, 0);
+	var itemPosition = new Vector2(nextSlot * 44 - 1, -2);
 	var newPosition = itemPosition.combine(basePosition);
 
 	//Create the texture from an image path

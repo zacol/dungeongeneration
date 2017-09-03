@@ -63,7 +63,7 @@ var PlayerFactory = {
 
 		//The entity has a weapon
 		//TODO: Change this to a loadout. Something that says: Hey you are wearing this and this and this
-		entity.addComponent(new Weapon(7));
+		entity.addComponent(new Weapon(1));
 
 		//This entity is capable of fighting
 		var canAttackTypes = [];

@@ -16,7 +16,7 @@ var Entity = require('../gameobjects/entity.js'),
 var ItemFactory = {
 
     /**
-     * Function that returns a new sword
+     * Function that returns a new short sword
      * @public
      *
      * @param {Game} game - Reference to the currently running game
@@ -24,10 +24,47 @@ var ItemFactory = {
      *
      * @return {Entity} An item entity
      */
-    newSword: function (game, position) {
+    newKnife: function (game, position) {
 
         //Create the entity
-        var entity = new Entity(game, "Item", "Sword", "warrior_right.png");
+        var entity = new Entity(game, "Item", "Knife", "knife.png");
+
+        //The starting position of the player is at the dungeon's entrance
+        entity.addComponent(new Position(position));
+
+        //The entity has a weapon
+        entity.addComponent(new Weapon(5));
+
+        //This entity is capable of being picked up by the following entity types
+        var canPickedUpBy = ['Player'];
+
+        entity.addComponent(new CanPickUp(game, canPickedUpBy));
+
+        //Add a tooltip to this entity
+        entity.addComponent(new Tooltip(
+            "Short Sword",
+            "Item",
+            "Weapon"
+        ));
+
+        //Return the entity
+        return entity;
+
+    },
+    
+    /**
+     * Function that returns a new short sword
+     * @public
+     *
+     * @param {Game} game - Reference to the currently running game
+     * @param {Vector2} position - The position object of this entity
+     *
+     * @return {Entity} An item entity
+     */
+    newShortSword: function (game, position) {
+
+        //Create the entity
+        var entity = new Entity(game, "Item", "Short Sword", "short_sword.png");
 
         //The starting position of the player is at the dungeon's entrance
         entity.addComponent(new Position(position));
@@ -42,9 +79,9 @@ var ItemFactory = {
 
         //Add a tooltip to this entity
         entity.addComponent(new Tooltip(
-            "Sword",
+            "Knife",
             "Item",
-            "Regular Sword"
+            "Weapon"
         ));
 
         //Return the entity

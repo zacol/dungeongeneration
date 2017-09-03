@@ -145,6 +145,7 @@ Game.prototype = {
         loader.add([
             'assets/tilesets/dungeon.json',
             'assets/sprites/entities.json',
+            'assets/sprites/items.json',
             'assets/tilesets/decoration.json',
             'assets/tilesets/ui.json'
         ]);
@@ -192,16 +193,17 @@ Game.prototype = {
 		//Initialize the map
 		this.initializeMap();
 
-        //TODO: Remove temp spawning sword code
-		var sword = ItemFactory.newSword(this, new Vector2(this.map.entrance.x + 1, this.map.entrance.y));
-		this.map.entities.add(sword);
-		var startingSwordTile = this.map.tiles[this.map.entrance.x + 1][this.map.entrance.y];
-		startingSwordTile.add(sword);
+        //TODO: Remove temp spawning short sword code
+		var shortSword = ItemFactory.newShortSword(this, new Vector2(this.map.entrance.x + 1, this.map.entrance.y));
+		this.map.entities.add(shortSword);
+		var startingShortSwordTile = this.map.tiles[this.map.entrance.x + 1][this.map.entrance.y];
+		startingShortSwordTile.add(shortSword);
 		
-		var sword2 = ItemFactory.newSword(this, new Vector2(this.map.entrance.x + 1, this.map.entrance.y));
-		this.map.entities.add(sword2);
-		var startingSword2Tile = this.map.tiles[this.map.entrance.x - 1][this.map.entrance.y];
-		startingSwordTile.add(sword2);
+		//TODO: Remove temp spawning knife code
+		var knife = ItemFactory.newKnife(this, new Vector2(this.map.entrance.x - 1, this.map.entrance.y));
+		this.map.entities.add(knife);
+		var startingKnifeTile = this.map.tiles[this.map.entrance.x - 1][this.map.entrance.y];
+		startingKnifeTile.add(knife);
 
 		//Initialize the movement system
 		this.staticSystems.movementSystem = new Movement(this);
