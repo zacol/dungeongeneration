@@ -2,10 +2,10 @@
 'use strict';
 
 //Require necessary modules
-var PropFactory = require('../factories/propfactory.js'),
-	DecorationFactory = require('../factories/decorationfactory.js'),
-	EnemyFactory = require('../factories/enemyfactory.js'),
-	Vector2 = require('../geometry/vector2.js'),
+var PropFactory = require('../factories/propfactory.js').PropFactory,
+	DecorationFactory = require('../factories/decorationfactory.js').DecorationFactory,
+	EnemyFactory = require('../factories/enemyfactory.js').EnemyFactory,
+	Vector2 = require('../geometry/vector2.js').Vector2,
 	Utils = require('../core/utils.js');
 
 /**
@@ -196,27 +196,18 @@ MapDecorator.prototype = {
 
 				}
 
-				//If the current tile is a floor tile
 				if(map.tiles[x][y].type === 2) {
-
-					//Have a random chance to spawn grass on this tile
 					if(Utils.randomNumber(0, 100) >= 80) {
-
-						//Create a new grass entity
-						var grassEntity = new DecorationFactory.newGrass(
+						const grassEntity = DecorationFactory.newGrass(
 							this.game,
 							new Vector2(x, y)
 						);
 
-						//Add the entity to the tile on the map
 						map.tiles[x][y].add(grassEntity);
 
-						//Add the entity to the map
 						map.entities.add(grassEntity);
 
 					}
-
-
 				}
 
 			}
@@ -362,7 +353,7 @@ MapDecorator.prototype = {
 						if(Utils.randomNumber(0, 100) >= 90) {
 
 							//Create a new grass entity
-							var enemyEntity = new EnemyFactory.newSpider(
+							var enemyEntity = EnemyFactory.newSpider(
 								this.game,
 								new Vector2(x, y)
 							);
@@ -403,7 +394,7 @@ MapDecorator.prototype = {
 						if(Utils.randomNumber(0, 100) >= 90) {
 
 							//Create a new grass entity
-							enemyEntity = new EnemyFactory.newSkeleton(
+							enemyEntity = EnemyFactory.newSkeleton(
 								this.game,
 								new Vector2(xPos, yPos)
 							);

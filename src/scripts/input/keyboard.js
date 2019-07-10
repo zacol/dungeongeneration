@@ -1,116 +1,48 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
+import { Key } from './key.js';
 
-//Require necessary modules
-var Key = require('./key.js');
+export class Keyboard {
 
-/**
- * Keyboard constructor
- *
- * @class Keyboard
- * @classdesc An object that handles a single key on a keyboard
- */
-var Keyboard = function() {
+	constructor() {
+		this.keys = {};
 
-	/**
-	 * @property {Object} keys - Object that holds all keys
-	 */
-	this.keys = {};
+		this.initialize();
+	}
 
-	//Initialize itself
-	this.initialize();
-
-};
-
-Keyboard.prototype = {
-
-	/**
-	 * Function to initialize the keyboard and therefore user input
-	 * @private
-	 */
-	initialize: function() {
-
-		//The onKeyDown event of the document is the following function:
-		this._onKeyDown = function(event) {
+	initialize() {
+		this._onKeyDown = (event) => {
 			return this.processKeyDown(event);
 		};
 
-		//The onKeyUp event of the document is the following function:
-		this._onKeyUp = function(event) {
+		this._onKeyUp = (event) => {
 			return this.processKeyUp(event);
 		};
 
-		//Add the event listeners to the window
-		window.addEventListener('keydown', this._onKeyDown.bind(this), false);
-		window.addEventListener('keyup', this._onKeyUp.bind(this), false);
+		window.addEventListener('keydown', this._onKeyDown, false);
+		window.addEventListener('keyup', this._onKeyUp, false);
+	}
 
-	},
-
-	/**
-	 * Function to get a specific key from the keyboard
-	 * and add it if it does't exist yet
-	 * @public
-	 *
-	 * @param {Number} keycode - The keycode of the key being added
-	 *
-	 * @return {Key} The Key object
-	 */
-	getKey: function(keycode) {
-
-		//Check if the key allready exists
-		if(this.keys[keycode] === undefined) {
-
-			//Add a brand new key to the keyboards key list
+	getKey(keycode) {
+		if (this.keys[keycode] === undefined) {
 			this.keys[keycode] = new Key(keycode);
-
 		}
 
-		//Return the key so we can use it in other functions
 		return this.keys[keycode];
+	}
 
-	},
-
-	/**
-	 * Function that handles keydown events
-	 * @private
-	 *
-	 * @param {Object} event - The event object
-	 */
-	processKeyDown: function(event) {
-
-		//Only continue if the key being pressed is assigned to the keyboard
-		if(this.keys[event.keyCode] !== undefined) {
-
-			//Prevent the default action of the key
+	processKeyDown(event) {
+		if (this.keys[event.keyCode] !== undefined) {
 			event.preventDefault();
 
-			//Call the callback's defined on this key
 			this.keys[event.keyCode].processKeyDown(event);
 
 		}
-
-	},
-
-	/**
-	 * Function that handles keydown events
-	 * @private
-	 *
-	 * @param {Object} event - The event object
-	 */
-	processKeyUp: function(event) {
-
-		//Only continue if the key being pressed is assigned to the keyboard
-		if(this.keys[event.keyCode] !== undefined) {
-
-			//Call the callback's defined on this key
-			this.keys[event.keyCode].processKeyUp(event);
-
-		}
-
 	}
 
+	processKeyUp(event) {
+		if (this.keys[event.keyCode] !== undefined) {
+			event.preventDefault();
+
+			this.keys[event.keyCode].processKeyUp(event);
+		}
+	}
 };
-
-//Export the Browserify module
-module.exports = Keyboard;
-

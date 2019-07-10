@@ -2,8 +2,8 @@
 'use strict';
 
 //Require necessary modules
-var Camera = require('./camera.js'),
-	Vector2 = require('../geometry/vector2.js');
+var Camera = require('./camera.js').Camera,
+	Vector2 = require('../geometry/vector2.js').Vector2;
 
 /**
  * World constructor

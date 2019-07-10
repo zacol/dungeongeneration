@@ -2,9 +2,9 @@
 'use strict';
 
 //Require necessary modules
-var Room = require('./room.js'),
-	Vector2 = require('../geometry/vector2.js'),
-	EnemyFactory = require('../factories/enemyfactory.js'),
+var Room = require('./room.js').Room,
+	Vector2 = require('../geometry/vector2.js').Vector2,
+	EnemyFactory = require('../factories/enemyfactory.js').EnemyFactory,
 	Utils = require('../core/utils.js');
 
 /**

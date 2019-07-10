@@ -2,10 +2,10 @@
 'use strict';
 
 //Require necessary modules
-var Entity = require('../gameobjects/entity.js'),
+var Entity = require('../gameobjects/entity.js').Entity,
 	Position = require('../gameobjects/components/position.js'),
-	CanOpen = require('../gameobjects/components/canopen.js'),
-	Collide = require('../gameobjects/components/collide.js'),
+	CanOpen = require('../gameobjects/components/canopen.js').CanOpen,
+	Collide = require('../gameobjects/components/collide.js').Collide,
 	Tooltip = require('../gameobjects/components/tooltip.js');
 
 /**
@@ -13,88 +13,53 @@ var Entity = require('../gameobjects/entity.js'),
  * @classdesc A factory that returns pre made props with
  * a set of components. Props are like decorations but can be touched: boxes, boulders, and doors.
  */
-var PropFactory = {
+export class PropFactory {
+	static newEntrance(game, position) {
+		const entity = new Entity(
+			game,
+			'Prop',
+			'Entrance',
+			'stairs_up.png'
+		);
 
-	/**
-	 * Function that returns a new entrance to the map
-	 * @public
-	 *
-	 * @param {Game} game - Reference to the currently running game
-	 * @param {Vector2} position - The position object of this entity
-	 *
-	 * @return {Entity} An prop entity
-	 */
-	newEntrance: function(game, position) {
-
-		//Create the entity
-		var entity = new Entity(game, "Prop", "Entrance", "stairs_up.png");
-
-		//The starting position of the entity
 		entity.addComponent(new Position(position));
 
-		//Return the entity
 		return entity;
-
-	},
-
-	/**
-	 * Function that returns a new exit to the map
-	 * @public
-	 *
-	 * @param {Game} game - Reference to the currently running game
-	 * @param {Vector2} position - The position object of this entity
-	 *
-	 * @return {Entity} An prop entity
-	 */
-	newExit: function(game, position) {
-
-		//Create the entity
-		var entity = new Entity(game, "Prop", "Exit", "stairs_down.png");
-
-		//The starting position of the entity
-		entity.addComponent(new Position(position));
-
-		//Return the entity
-		return entity;
-
-	},
-
-	/**
-	 * Function that returns a new door
-	 * @public
-	 *
-	 * @param {Game} game - Reference to the currently running game
-	 * @param {Vector2} position - The position object of this entity
-	 *
-	 * @return {Entity} An prop entity
-	 */
-	newDoor: function(game, position) {
-
-		//Create the entity
-		var entity = new Entity(game, "Prop", "Wooden Door", "door_horizontal_closed.png");
-
-		//The starting position of the entity
-		entity.addComponent(new Position(position));
-
-		//This entity can be opened up by another entity
-		entity.addComponent(new CanOpen(game, entity));
-
-		//You can collide with this entity
-		entity.addComponent(new Collide(true));
-
-		//Add a tooltip to this entity
-		entity.addComponent(new Tooltip(
-			entity.name,
-			"Closed",
-			""
-		));
-
-		//Return the entity
-		return entity;
-
 	}
 
-};
+	static newExit(game, position) {
+		const entity = new Entity(
+			game, 
+			'Prop', 
+			'Exit', 
+			'stairs_down.png'
+		);
 
-//Export the Browserify module
-module.exports = PropFactory;
+		entity.addComponent(new Position(position));
+
+		return entity;
+	}
+
+	static newDoor(game, position) {
+		const entity = new Entity(
+			game,
+			'Prop',
+			'Wooden Door',
+			'door_horizontal_closed.png',
+		);
+		
+		entity.addComponent(new Position(position));
+
+		entity.addComponent(new CanOpen(game, entity));
+
+		entity.addComponent(new Collide(true));
+
+		entity.addComponent(new Tooltip(
+			entity.name,
+			'Closed',
+			''
+		));
+
+		return entity;
+	}
+};

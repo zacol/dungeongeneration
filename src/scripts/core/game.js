@@ -4,14 +4,14 @@
 //Require necessary modules
 var Utils = require('./utils.js'),
 	UI = require('../ui/ui.js'),
-	Camera = require('./camera.js'),
+	Camera = require('./camera.js').Camera,
 	World = require('./world.js'),
-	SizeManager = require('./sizemanager.js'),
-	Map = require('../tilemap/map.js'),
-	PlayerFactory = require('../factories/playerfactory.js'),
-	ItemFactory = require('../factories/itemfactory.js'),
-	Vector2 = require('../geometry/vector2.js'),
-	Group = require('../gameobjects/group.js'),
+	SizeManager = require('./sizemanager.js').SizeManager,
+	Map = require('../tilemap/map.js').Map,
+	PlayerFactory = require('../factories/playerfactory.js').PlayerFactory,
+	ItemFactory = require('../factories/itemfactory.js').ItemFactory,
+	Vector2 = require('../geometry/vector2.js').Vector2,
+	Group = require('../gameobjects/group.js').Group,
 	Combat = require('../gameobjects/systems/combat.js'),
 	LightMap = require('../gameobjects/systems/lightmap.js'),
 	Movement = require('../gameobjects/systems/movement.js'),
@@ -22,7 +22,7 @@ var Utils = require('./utils.js'),
 	MapFactory = require('../tilemap/mapfactory.js'),
 	MapDecorator = require('../tilemap/mapdecorator.js'),
 	Scheduler = require('../time/scheduler.js'),
-	Keyboard = require('../input/keyboard.js'),
+	Keyboard = require('../input/keyboard.js').Keyboard,
 	StatusFire = require('../gameobjects/statuseffects/fire.js');
 
 /**
@@ -34,113 +34,36 @@ var Utils = require('./utils.js'),
  *
  * @param {Object} userSettings - The settings that the user provides
  */
-var Game = function(userSettings) {
+export class Game {
+	constructor(userSettings) {
+		this.isInitialized = false;
+		this.isActive = false;
+		this.map = null;
+		this.mapFactory = null;
+		this.mapDecorator = null;
+		this.keyboard = null;
+		this.scheduler = null;
+		this.staticSystems = {};
+		this.dynamicSystems = [];
+		this.player = null;
+		this.world = null;
+		this.UI = null;
+		this.sizeManager = null;
+		this.stage = null;
+		this.renderer = null;
+		this.settings = {
+			tilesX: 60, //The number of horizontal tiles on this map
+			tilesY: 40, //The number of vertical tiles on this map
+			zoom: 3 //The scale of the map
+		};
+		this.settings = Utils.extend(this.settings, userSettings);
+		this.load();
+	}
 
-	/**
-	 * @property {Boolean} isInitialized - Boolean to see if the game is already initialized
-	 */
-	this.isInitialized = false;
-
-	/**
-	 * @property {Boolean} isActive - Boolean to see if the game is currently active
-	 */
-	this.isActive = false;
-
-	/**
-	 * @property {Map} map - Reference to the current map
-	 */
-	this.map = null;
-
-	/**
-	 * @property {MapFactory} mapFactory - The mapFactory is responsible for creating rooms and corridors on this map
-	 */
-	this.mapFactory = null;
-
-	/**
-	 * @property {MapDecorator} mapDecorator - The mapDecorator is responsible for decorating the map with props and enemies
-	 */
-	this.mapDecorator = null;
-
-	/**
-	 * @property {Keyboard} keyboard - Reference to the keyboard object
-	 */
-	this.keyboard = null;
-
-	/**
-	 * @property {Scheduler} scheduler - Reference to the scheduler object
-	 */
-	this.scheduler = null;
-
-	/**
-	 * @property {Object} staticSystems - An object with all the static systems
-	 */
-	this.staticSystems = {};
-
-	/**
-	 * @property {Array} dynamicSystems - An array with all the current systems that need to be looped
-	 */
-	this.dynamicSystems = [];
-
-	/**
-	 * @property {Entity} player - Reference to the player object
-	 */
-	this.player = null;
-
-	/**
-	 * @property {World} world - Reference to the World object
-	 */
-	this.world = null;
-
-	/**
-	 * @property {UI} stage - The UI object
-	 */
-	this.UI = null;
-
-    /**
-     * @property {SizeManager} sizeManager - Reference to size manager that handles the scale and resizing of the canvas object
-     */
-    this.sizeManager = null;
-
-	/**
-	 * @property {PIXI.Container} stage - The main PIXI container object which will be rendered
-	 */
-	this.stage = null;
-
-	/**
-	 * @property {PIXI.CanvasRenderer|PIXI.WebGLRenderer} renderer - The Pixi renderer
-	 */
-	this.renderer = null;
-
-	/**
-	 * @property {Object} settings - The default settings
-	 */
-	this.settings = {
-		tilesX: 60, //The number of horizontal tiles on this map
-		tilesY: 40, //The number of vertical tiles on this map
-		zoom: 3 //The scale of the map
-	};
-
-	//Extend the default settings with those of the user
-	this.settings = Utils.extend(this.settings, userSettings);
-
-	//Load and then initialize itself
-	this.load();
-
-};
-
-Game.prototype = {
-
-    /**
-     * Pre-load all assets required in the game
-     * @private
-     */
-	load: function() {
-
-		//Tell PIXI.js to scale the images with Nearest Neighbour and not Linear
+	load() {
 		PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 
-		//Create a new PIXI.AssetLoader object
-		var loader = PIXI.loader;
+		const loader = PIXI.loader;
 
         loader.add([
             'assets/tilesets/dungeon.json',
@@ -150,147 +73,81 @@ Game.prototype = {
             'assets/tilesets/ui.json'
         ]);
 
-		//Define the callback when the loader has finished
         loader.once('complete', this.initialize.bind(this));
 
-		//Start loading the assets
 		loader.load();
+	}
 
-	},
-
-	/**
-	 * Initialize the game, create all objects
-	 * @private
-	 */
-	initialize: function() {
-
-		//Check if the game is already initialized
+	initialize() {
 		if(this.isInitialized) {
 			return;
 		}
 
-		//Create the PIXI stage object
 		this.stage = new PIXI.Container();
 
-		//Create a new instance of the sizeManager
         this.sizeManager = new SizeManager(this);
 
-		//Auto detect the best renderer
 		this.renderer = PIXI.autoDetectRenderer(this.sizeManager.width, this.sizeManager.height);
 
-		//Add the renderer view element to the DOM
 		document.body.appendChild(this.renderer.view);
 
-		//Create the world object
 		this.world = new World(this);
 
-		//Create a new keyboard
 		this.keyboard = new Keyboard();
 
-		//Create a new scheduler
 		this.scheduler = new Scheduler();
 
-		//Initialize the map
 		this.initializeMap();
 
-        //TODO: Remove temp spawning short sword code
-		var shortSword = ItemFactory.newShortSword(this, new Vector2(this.map.entrance.x + 1, this.map.entrance.y));
-		this.map.entities.add(shortSword);
-		var startingShortSwordTile = this.map.tiles[this.map.entrance.x + 1][this.map.entrance.y];
-		startingShortSwordTile.add(shortSword);
-		
-		//TODO: Remove temp spawning knife code
-		var knife = ItemFactory.newKnife(this, new Vector2(this.map.entrance.x - 1, this.map.entrance.y));
-		this.map.entities.add(knife);
-		var startingKnifeTile = this.map.tiles[this.map.entrance.x - 1][this.map.entrance.y];
-		startingKnifeTile.add(knife);
-
-		//Initialize the movement system
 		this.staticSystems.movementSystem = new Movement(this);
 
-		//Initialize the movement system
 		this.staticSystems.pathfindingSystem = new PathFinding(this);
 
-		//Initialize the combat system
 		this.staticSystems.combatSystem = new Combat(this);
 
-		//Initialize the open system
 		this.staticSystems.openSystem = new Open(this);
 
-		//Initialize the status effects system
 		this.staticSystems.statusEffectsSystem = new statusEffectsSystem(this);
 
-		//Initialize the inventory system
 		this.staticSystems.inventorySystem = new inventorySystem(this);
 
-		//Add all systems to the game that need to be looped
 		this.dynamicSystems.push(new LightMap(this));
 
-		//Initialize the player
 		this.initializePlayer();
 
-		//Initialize the UI container and all UI objects
 		this.UI = new UI(this);
 
-		//The game is fully initialized!
 		this.isInitialized = true;
 
-		//Make the game active for the first time
 		this.isActive = true;
 
-        //Update the game for the first time
         this.update();
 
-        //Update all dynamic systems for the first time
         for(var s = 0; s < this.dynamicSystems.length; s++) {
-
-            //Update the current system
             this.dynamicSystems[s].update();
-
         }
+	}
 
-	},
-
-	/**
-	 * Creates and populates a new map
-	 * @private
-	 */
-	initializeMap: function() {
-
-		//Initialize the map
+	initializeMap() {
 		this.map = new Map(this);
 
-		//Create the map factory
 		this.mapFactory = new MapFactory(this);
 
-		//Create the map decorator
 		this.mapDecorator = new MapDecorator(this);
 
-		//Add a new entity group to the map
 		this.map.entities = new Group(this);
 
-		//Generate rooms for this map
 		this.mapFactory.generateRooms();
 
-		//Decorate the map
 		this.mapDecorator.decorateMap();
 
-		//Add the entities group to the world
 		this.world.addChild(this.map.entities);
+	}
 
-	},
+	initializePlayer() {
+        const startPosition = new Vector2(this.map.entrance.x, this.map.entrance.y);
 
-	/**
-	 * Initializes and adds the player to the game
-	 * @private
-	 */
-	initializePlayer: function() {
-
-        //Get the start position of the player
-        var startPosition = new Vector2(this.map.entrance.x, this.map.entrance.y);
-
-        //Associative array with every control that this entity uses
-        var playerControls = {
+        const playerControls = {
             "left": 65,
             "right": 68,
             "up": 87,
@@ -309,103 +166,59 @@ Game.prototype = {
 			"equip9": 57,
         };
 
-        //Create the player entity
         this.player = PlayerFactory.newPlayerWarrior(this, startPosition, playerControls);
 
-		//Add the player to the entities list of the current map
 		this.map.entities.add(this.player);
 
-		//Get the tile that the player is going to spawn on
-		var startingTile = this.map.tiles[startPosition.x][startPosition.y];
+		const startingTile = this.map.tiles[startPosition.x][startPosition.y];
 
-		//Add the player to the tile it spawns on
 		startingTile.add(this.player);
 
-        //TODO: Remove this temp fire test
 		this.staticSystems.statusEffectsSystem.addStatusEffect(this.player, new StatusFire());
 
-		//Add the player to the scheduler
 		this.scheduler.add(this.player, true);
 
-		//Let the camera follow the player entity
 		this.world.camera.follow(this.player, this.sizeManager.width / 2, this.sizeManager.height / 2);
+	}
 
-	},
-
-	/**
-	 * All the functions that need to be executed every time the game updates
-	 * Basically the game loop
-	 * @private
-	 */
-	update: function() {
-
-		//Start measuring the FPS
+	update() {
 		this.UI.stats.begin();
 
-		//If the game is not currently active, restart
 		if(this.isInitialized && !this.isActive) {
-
 			this.restart();
-
 		}
 
-		//Request a new animation frame and call the update function again
 		requestAnimationFrame(this.update.bind(this));
 
-		//While the scheduler is locked, continue ticking
 		while(!this.scheduler.lockCount) {
-
-			//Let the scheduler handle the next entity
 			this.scheduler.tick();
-
 		}
 
-        //Initiate the update function on the world object
 		this.world.update();
 
-		//Render the stage
 		this.renderer.render(this.stage);
 
-		//Stop measuring the FPS
 		this.UI.stats.end();
-
-	},
-
-	/**
-	 * Restarts the game with a fresh map and player
-	 * @private
-	 */
-	restart: function() {
-
-		//Clear events from the scheduler
-		this.scheduler.clear();
-
-        //Remove the map container from the stage
-        this.stage.removeChildren();
-
-        //Create the world object
-        this.world = new World(this);
-
-        //Initialize map and player
-		this.initializeMap();
-		this.initializePlayer();
-
-        //Initialize the UI container and all UI objects
-        this.UI = new UI(this);
-
-		//Initialize the pathfinding system with the new game map
-		this.staticSystems.pathfindingSystem.game = this;
-		this.staticSystems.pathfindingSystem.initialize();
-
-		//Clear the textlog from the previous game
-		this.UI.textLog.clear();
-
-		//Make game active
-		this.isActive = true;
 
 	}
 
-};
+	restart() {
+		this.scheduler.clear();
 
-//Export the Browserify module
-module.exports = Game;
+        this.stage.removeChildren();
+
+        this.world = new World(this);
+
+		this.initializeMap();
+		this.initializePlayer();
+
+        this.UI = new UI(this);
+
+		this.staticSystems.pathfindingSystem.game = this;
+		this.staticSystems.pathfindingSystem.initialize();
+
+		this.UI.textLog.clear();
+
+		this.isActive = true;
+	}
+};

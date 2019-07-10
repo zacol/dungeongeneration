@@ -1,13 +1,13 @@
-*{
+* {
     margin:0;
     padding:0;
 }
 
-body{
+body {
 	background-color:#000;
 }
 
-canvas{
+canvas {
 	display:block;
     background-color:#000;
 }

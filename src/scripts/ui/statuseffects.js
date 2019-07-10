@@ -2,7 +2,7 @@
 'use strict';
 
 //Require necessary modules
-var Vector2 = require('../geometry/vector2.js');
+var Vector2 = require('../geometry/vector2.js').Vector2;
 
 /**
  * StatusEffects constructor

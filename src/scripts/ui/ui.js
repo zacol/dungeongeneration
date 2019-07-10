@@ -7,7 +7,7 @@ var TextLog = require('../ui/textlog.js'),
 	SpellBar = require('../ui/spellbar.js'),
 	TooltipElement = require('../ui/tooltipelement.js'),
 	StatusEffects = require('../ui/statuseffects.js'),
-	Vector2 = require('../geometry/vector2.js');
+	Vector2 = require('../geometry/vector2.js').Vector2;
 
 /**
  * UI constructor
