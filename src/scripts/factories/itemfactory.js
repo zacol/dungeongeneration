@@ -1,66 +1,60 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
-//Require necessary modules
-var Entity = require('../gameobjects/entity.js').Entity,
-    Weapon = require('../gameobjects/components/weapon.js'),
-    CanPickUp = require('../gameobjects/components/canpickup.js').CanPickUp,
-    Tooltip = require('../gameobjects/components/tooltip.js'),
-    Position = require('../gameobjects/components/position.js');
+import { Entity } from '../gameobjects/entity.js';
+import { Weapon } from '../gameobjects/components/weapon.js';
+import { CanPickUp } from '../gameobjects/components/canpickup.js';
+import { Tooltip } from '../gameobjects/components/tooltip.js';
+import { Position } from '../gameobjects/components/position.js';
 
 /**
- * @class ItemFactory
- * @classdesc A factory that returns pre made item entities with
- * a set of components
+ * A factory that creates items' entities.
+ * Items are things that player can pick up and use:
+ * weapons, armors, talismans and other usable items.
  */
 export class ItemFactory {
-    static newKnife(game, position) {
-        const entity = new Entity(
-            game,
-            'Item',
-            'Knife',
-            'knife.png'
-        );
+  /**
+   * Create an entity that represents knife.
+   *
+   * @param {Game} game - Reference to the currently running game.
+   * @param {Vector2} position - The position object of this entity.
+   *
+   * @return {Entity} An item entity object.
+   */
+  static newKnife(game, position) {
+    const entity = new Entity(game, 'Item', 'Knife', 'knife.png');
 
-        entity.addComponent(new Position(position));
+    entity.addComponent(new Position(position));
 
-        entity.addComponent(new Weapon(5));
+    entity.addComponent(new Weapon(5));
 
-        const canPickedUpBy = ['Player'];
+    const canPickedUpBy = ['Player'];
 
-        entity.addComponent(new CanPickUp(game, canPickedUpBy));
+    entity.addComponent(new CanPickUp(game, canPickedUpBy));
 
-        entity.addComponent(new Tooltip(
-            'Short Sword',
-            'Item',
-            'Weapon'
-        ));
+    entity.addComponent(new Tooltip('Short Sword', 'Item', 'Weapon'));
 
-        return entity;
-    }
-    
-    static newShortSword(game, position) {
-        const entity = new Entity(
-            game,
-            'Item',
-            'Short Sword',
-            'short_sword.png'
-        );
+    return entity;
+  }
 
-        entity.addComponent(new Position(position));
+  /**
+   * Create an entity that represents short sword.
+   *
+   * @param {Game} game - Reference to the currently running game.
+   * @param {Vector2} position - The position object of this entity.
+   *
+   * @return {Entity} An item entity object.
+   */
+  static newShortSword(game, position) {
+    const entity = new Entity(game, 'Item', 'Short Sword', 'short_sword.png');
 
-        entity.addComponent(new Weapon(10));
+    entity.addComponent(new Position(position));
 
-        const canPickedUpBy = ['Player'];
+    entity.addComponent(new Weapon(10));
 
-        entity.addComponent(new CanPickUp(game, canPickedUpBy));
+    const canPickedUpBy = ['Player'];
 
-        entity.addComponent(new Tooltip(
-            'Knife',
-            'Item',
-            'Weapon'
-        ));
+    entity.addComponent(new CanPickUp(game, canPickedUpBy));
 
-        return entity;
-    }
-};
+    entity.addComponent(new Tooltip('Knife', 'Item', 'Weapon'));
+
+    return entity;
+  }
+}

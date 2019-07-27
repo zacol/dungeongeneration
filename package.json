@@ -17,9 +17,11 @@
     "node": ">= 6.11.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.2",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.6.0",
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
@@ -28,6 +30,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "jsdoc": "^3.6.3",
     "prettier": "1.18.2",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
@@ -36,7 +39,8 @@
     "build": "webpack --progress",
     "start": "webpack-dev-server --open",
     "lint": "eslint src/scripts -c .eslintrc --ext js",
-    "format": "prettier --write src/scripts"
+    "pretty": "prettier --write \"./src/scripts/**/*.{js,json}\"",
+    "generate-docs": "jsdoc -r ./src/scripts -d ./docs"
   },
   "license": "MIT"
 }

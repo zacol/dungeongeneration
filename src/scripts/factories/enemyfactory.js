@@ -1,88 +1,148 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
+import { Entity } from '../gameobjects/entity.js';
+import { MoveBehaviours } from '../gameobjects/behaviours/moveBehaviours.js';
+import { Position } from '../gameobjects/components/position.js';
+import { Collide } from '../gameobjects/components/collide.js';
+import { Health } from '../gameobjects/components/health.js';
+import { CanFight } from '../gameobjects/components/canfight.js';
+import { Weapon } from '../gameobjects/components/weapon.js';
+import { MovementComponent } from '../gameobjects/components/movement.js';
+import { Tooltip } from '../gameobjects/components/tooltip.js';
 
-//Require necessary modules
-var Entity = require('../gameobjects/entity.js').Entity,
-	MoveBehaviours = require('../gameobjects/behaviours/moveBehaviours.js'),
-	Position = require('../gameobjects/components/position.js'),
-	CanOpen = require('../gameobjects/components/canopen.js'),
-	Collide = require('../gameobjects/components/collide.js').Collide,
-	Health = require('../gameobjects/components/health.js').Health,
-	CanFight = require('../gameobjects/components/canfight.js').CanFight,
-	Weapon = require('../gameobjects/components/weapon.js'),
-	MovementComponent = require('../gameobjects/components/movement.js'),
-	Tooltip = require('../gameobjects/components/tooltip.js');
-
+/**
+ * A factory that creates enemies' entities.
+ * Enemies are the creatues that chase you up and try to hurt you:
+ * spiders, skeletons, dwarves and other bad guys.
+ */
 export class EnemyFactory {
-	static newSpider(game, position) {
-		const entity = new Entity(
-			game,
-			'Arachnid',
-			'Quick Spider',
-			'spider_small_right.png',
-			2000
-		);
+  /**
+   * Create an entity that represents spider.
+   *
+   * @param {Game} game - Reference to the currently running game.
+   * @param {Vector2} position - The position object of this entity.
+   *
+   * @return {Entity} An enemy entity object.
+   */
+  static newSpider(game, position) {
+    const entity = new Entity(
+      game,
+      'Arachnid',
+      'Quick Spider',
+      'spider_small_right.png',
+      2000,
+    );
 
-		entity.addComponent(new Health(20));
+    entity.addComponent(new Health(20));
 
-		entity.addComponent(new Position(position));
+    entity.addComponent(new Position(position));
 
-		entity.addComponent(new Collide(true));
+    entity.addComponent(new Collide(true));
 
-		entity.addComponent(new MovementComponent(
-			game,
-			entity,
-			MoveBehaviours.walkBehaviour()
-		));
+    entity.addComponent(
+      new MovementComponent(game, entity, MoveBehaviours.walkBehaviour()),
+    );
 
-		entity.addComponent(new Weapon(4));
+    entity.addComponent(new Weapon(4));
 
-		const canAttackTypes = ['Player'];
+    const canAttackTypes = ['Player'];
 
-		entity.addComponent(new CanFight(game, canAttackTypes));
+    entity.addComponent(new CanFight(game, canAttackTypes));
 
-		entity.addComponent(new Tooltip(
-			entity.name,
-			'Arachnid Enemy',
-			'The quick spider is twice as fast as you and will definitely attack you. It\'s just programmed to do so.'
-		));
+    entity.addComponent(
+      new Tooltip(
+        entity.name,
+        'Arachnid Enemy',
+        "The quick spider is twice as fast as you and will definitely attack you. It's just programmed to do so.",
+      ),
+    );
 
-		return entity;
-	}
+    return entity;
+  }
 
-	static newSkeleton(game, position) {
-		var entity = new Entity(
-			game,
-			'Undead',
-			'Skeleton',
-			'skeleton_right.png',
-			1000
-		);
+  /**
+   * Create an entity that represents skeletion.
+   *
+   * @param {Game} game - Reference to the currently running game.
+   * @param {Vector2} position - The position object of this entity.
+   *
+   * @return {Entity} An enemy entity object.
+   */
+  static newSkeleton(game, position) {
+    const entity = new Entity(
+      game,
+      'Undead',
+      'Skeleton',
+      'skeleton_right.png',
+      1000,
+    );
 
-		entity.addComponent(new Health(50));
+    entity.addComponent(new Health(50));
 
-		entity.addComponent(new Position(position));
+    entity.addComponent(new Position(position));
 
-		entity.addComponent(new Collide(true));
+    entity.addComponent(new Collide(true));
 
-		entity.addComponent(new MovementComponent(
-			game,
-			entity,
-			MoveBehaviours.walkBehaviour()
-		));
+    entity.addComponent(
+      new MovementComponent(game, entity, MoveBehaviours.walkBehaviour()),
+    );
 
-		entity.addComponent(new Weapon(10));
+    entity.addComponent(new Weapon(10));
 
-		var canAttackTypes = ["Player"];
+    const canAttackTypes = ['Player'];
 
-		entity.addComponent(new CanFight(game, canAttackTypes));
+    entity.addComponent(new CanFight(game, canAttackTypes));
 
-		entity.addComponent(new Tooltip(
-			entity.name,
-			'Undead Enemy',
-			'The skeleton is a very dangerous but unstable enemy. If you stab just right his bones will collapse.'
-		));
+    entity.addComponent(
+      new Tooltip(
+        entity.name,
+        'Undead Enemy',
+        'The skeleton is a very dangerous but unstable enemy. If you stab just right his bones will collapse.',
+      ),
+    );
 
-		return entity;
-	}
-};
+    return entity;
+  }
+
+  /**
+   * Create an entity that represents dwarf.
+   *
+   * @param {Game} game - Reference to the currently running game.
+   * @param {Vector2} position - The position object of this entity.
+   *
+   * @return {Entity} An enemy entity object.
+   */
+  static newDwarf(game, position) {
+    const entity = new Entity(
+      game,
+      'Dwarf',
+      'Mountain Dwarf',
+      'dwarf_right.png',
+      1000,
+    );
+
+    entity.addComponent(new Health(20));
+
+    entity.addComponent(new Position(position));
+
+    entity.addComponent(new Collide(true));
+
+    entity.addComponent(
+      new MovementComponent(game, entity, MoveBehaviours.walkBehaviour()),
+    );
+
+    entity.addComponent(new Weapon(4));
+
+    const canAttackTypes = ['Player'];
+
+    entity.addComponent(new CanFight(game, canAttackTypes));
+
+    entity.addComponent(
+      new Tooltip(
+        entity.name,
+        'Dwarf Enemy',
+        'Dwarf are stubborn and set in their ways.',
+      ),
+    );
+
+    return entity;
+  }
+}

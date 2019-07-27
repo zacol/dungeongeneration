@@ -1,143 +1,115 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
 /**
- * Tooltip Element constructor
+ * The TooltipElement displays information when user hovers the pointer over entity.
  *
- * @class TooltipElement
- * @classdesc The Tooltip Element holds and stores all messages that entities send to it
- * Inherits from PIXI.Container
+ * @extends PIXI.Container
  */
-var TooltipElement = function() {
+export class TooltipElement extends PIXI.Container {
+  constructor() {
+    super();
 
-	/**
-	 * Inherit the constructor from the PIXI.Container object
-	 */
-	PIXI.Container.call(this);
+    /**
+     * @property {PIXI.Graphics} background - The background of the tooltip.
+     */
+    this.background = null;
 
-	/**
-	 * @property {PIXI.Graphics} background - The title of the tooltip
-	 */
-	this.background = null;
+    /**
+     * @property {PIXI.Text} title - The title of the tooltip.
+     */
+    this.title = null;
 
-	/**
-	 * @property {PIXI.Text} title - The title of the tooltip
-	 */
-	this.title = null;
+    /**
+     * @property {PIXI.Text} type - The type of entity.
+     */
+    this.type = null;
 
-	/**
-	 * @property {PIXI.Text} type - The type of entity
-	 */
-	this.type = null;
+    /**
+     * @property {PIXI.Text} description - The description of entity.
+     */
+    this.description = null;
+  }
 
-	/**
-	 * @property {PIXI.Text} description - The description of this entity
-	 */
-	this.description = null;
-};
+  /**
+   * Initialize the tooltip and create the PIXI.Text objects for later use.
+   *
+   * @public
+   */
+  initialize() {
+    this.background = new PIXI.Graphics();
 
-//Inherit the prototype from the PIXI.Container
-TooltipElement.prototype = Object.create(PIXI.Container.prototype);
-TooltipElement.prototype.constructor = TooltipElement;
+    this.addChild(this.background);
 
-/**
- * Initialize the textlog and create the PIXI.Text objects for later use
- * @public
- */
-TooltipElement.prototype.initialize = function() {
+    this.title = new PIXI.Text('', {
+      font: 'bold 12px Courier New',
+      fill: '#ffffff',
+      wordWrap: true,
+      wordWrapWidth: 150,
+    });
 
-	this.background = new PIXI.Graphics();
+    this.title.position.x = 15;
 
-	this.addChild(this.background);
+    this.addChild(this.title);
 
-	//Create all objects for the tooltip
-	this.title = new PIXI.Text(
-		"",
-		{
-			font: "bold 12px Courier New",
-			fill: "#ffffff",
-			wordWrap: true,
-			wordWrapWidth: 150
-		}
-	);
+    this.type = new PIXI.Text('', {
+      font: '12px Courier New',
+      fill: '#ffffff',
+      wordWrap: true,
+      wordWrapWidth: 150,
+    });
 
-	this.title.position.x = 15;
+    this.type.position.x = 15;
 
-	this.addChild(this.title);
+    this.addChild(this.type);
 
-	//Create all objects for the tooltip
-	this.type = new PIXI.Text(
-		"",
-		{
-			font: "12px Courier New",
-			fill: "#ffffff",
-			wordWrap: true,
-			wordWrapWidth: 150
-		}
-	);
+    this.description = new PIXI.Text('', {
+      font: '12px Courier New',
+      fill: '#b4b4b4',
+      wordWrap: true,
+      wordWrapWidth: 150,
+    });
 
-	this.type.position.x = 15;
+    this.description.position.x = 15;
 
-	this.addChild(this.type);
+    this.addChild(this.description);
+  }
 
-	//Create all objects for the tooltip
-	this.description = new PIXI.Text(
-		"",
-		{
-			font: "12px Courier New",
-			fill: "#b4b4b4",
-			wordWrap: true,
-			wordWrapWidth: 150
-		}
-	);
+  /**
+   * Calls the render function of each of the containers children.
+   *
+   * @public
+   *
+   * @param {String} title - The title of the entity tooltip element.
+   * @param {String} type - The type of the entity with the tooltip element.
+   * @param {String} description - The description of the entity with the tooltip element.
+   */
+  updateText(title, type, description) {
+    this.title.text = title;
+    this.type.text = type;
+    this.description.text = description;
 
-	this.description.position.x = 15;
+    let yPos = 15;
 
-	this.addChild(this.description);
+    this.title.position.y = yPos;
 
-};
+    if (title !== '') {
+      yPos += this.title.height;
+    }
 
-/**
- * Calls the render function of each of the containers children
- * @public
- *
- * @param {String} title - The title of the entity tooltip element
- * @param {String} type - The type of the entity with the tooltip element
- * @param {String} description - The description of the entity with the tooltip element
- */
-TooltipElement.prototype.updateText = function(title, type, description) {
+    this.type.position.y = yPos;
 
-	this.title.text = title;
-	this.type.text = type;
-	this.description.text = description;
+    if (type !== '') {
+      yPos += this.type.height;
+    }
 
-	var yPos = 15;
+    this.description.position.y = yPos;
 
-	this.title.position.y = yPos;
+    if (description !== '') {
+      yPos += this.description.height;
+    }
 
-	if(title !== ""){
-		yPos += this.title.height;
-	}
+    yPos += 15;
 
-	this.type.position.y = yPos;
-
-	if(type !== ""){
-		yPos += this.type.height;
-	}
-
-	this.description.position.y = yPos;
-
-	if(description !== ""){
-		yPos += this.description.height;
-	}
-
-	yPos += 15;
-
-	this.background.clear();
-	this.background.beginFill(0x000000, 0.5);
-	this.background.drawRect(0,0, this.width + 15, yPos);
-
-};
-
-//Export the Browserify module
-module.exports = TooltipElement;
+    this.background.clear();
+    this.background.beginFill(0x000000, 0.5);
+    this.background.drawRect(0, 0, this.width + 15, yPos);
+  }
+}

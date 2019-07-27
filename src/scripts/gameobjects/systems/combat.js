@@ -1,103 +1,67 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
 /**
- * Combat System constructor
- *
- * @class Combat
- * @classdesc The system that handles combat
- *
- * @param {Game} game - Reference to the currently running game
+ * The system that handles combat.
+ * 
+ * @param {Game} game - Reference to the currently running game.
  */
-var Combat = function(game) {
+export class Combat {
+  constructor(game) {
+    /**
+     * @property {Game} game - Reference to the current game object.
+     */
+    this.game = game;
+  }
 
-	/**
-	 * @property {Game} game - Reference to the current game object
-	 */
-	this.game = game;
+  /**
+   * Performs the needed operations for this specific system on one entity.
+   *
+   * @public
+   *
+   * @param {Entity} entity - The entity that is being processed by this system.
+   * @param {Entity} enemyEntity - The entity that is being attacked.
+   */
+  handleSingleEntity(entity, enemyEntity) {
+    const weaponComponent = entity.getComponent('weapon');
 
-};
+    if (enemyEntity.hasComponent('health')) {
+      const healthComponent = enemyEntity.getComponent('health');
 
-Combat.prototype = {
+      healthComponent.takeDamage(weaponComponent.damage);
 
-	/**
-	 * Performs the needed operations for this specific system on one entity
-	 * @public
-	 *
-	 * @param {Entity} entity - The entity that is being processed by this system
-	 * @param {Entity} enemyEntity - The entity that is being attacked
-	 */
-	handleSingleEntity: function(entity, enemyEntity) {
+      const textLogMessage = `${entity.name} hit ${enemyEntity.name} for ${weaponComponent.damage} damage`;
 
-		//Get the components from the current entity and store them temporarily in a variable
-		var weaponComponent = entity.getComponent("weapon");
+      if (healthComponent.isDead()) {
+        this.remove(enemyEntity);
 
-		//Check if the enemy even has a health component before we try to hit it
-		if(enemyEntity.hasComponent("health")) {
+        textLogMessage += ' and killed him with that attack!';
+      }
 
-			//Get the current entities components
-			var healthComponent = enemyEntity.getComponent("health");
+      this.game.UI.textLog.addMessage(textLogMessage);
+    }
+  }
 
-			//The weapon of the current entity should damage to the current enemy
-			healthComponent.takeDamage(weaponComponent.damage);
+  /**
+   * Remove a dead entity.
+   *
+   * @private
+   *
+   * @param {Entity} entity - The entity that is dead.
+   */
+  remove(entity) {
+    if (entity.hasComponent('keyboardControl')) {
+      this.game.scheduler.lock();
+      this.game.isActive = false;
+    }
 
-			//Generate the TextLog message
-			var textLogMessage = entity.name + " hit " + enemyEntity.name + " for " + weaponComponent.damage + " damage";
+    this.game.map.entities.remove(entity);
 
-			//If the enemy is dead, we have to remove him from the game
-			if(healthComponent.isDead()) {
+    this.game.scheduler.remove(entity);
 
-				//Add the current enemy to the remove stack, this way the loop doesn't get interrupted
-				this.remove(enemyEntity);
+    const positionComponent = entity.getComponent('position');
 
-				//Add another string to the message
-				textLogMessage += " and killed him with that attack!";
+    const currentTile = this.game.map.tiles[positionComponent.position.x][
+      positionComponent.position.y
+    ];
 
-			}
-
-			//Add the text log message to the textlog
-			this.game.UI.textLog.addMessage(textLogMessage);
-
-		}
-
-	},
-
-	/**
-	 * Remove a dead entity
-	 * @private
-	 *
-	 * @param {Entity} entity - The entity that is dead
-	 */
-	remove: function(entity) {
-
-		//Check for the player entity being removed
-		if(entity.hasComponent("keyboardControl")) {
-
-			//Lock the scheduler to stop the game
-			this.game.scheduler.lock();
-			//Make the game inactive
-			this.game.isActive = false;
-
-		}
-
-		//Remove the entity from the map's list
-		this.game.map.entities.remove(entity);
-
-		//Remove the entity from the scheduler
-		this.game.scheduler.remove(entity);
-
-		//Get the components of this entity
-		var positionComponent = entity.getComponent("position");
-
-		//Get the tile that the entity ws standing on
-		var currentTile = this.game.map.tiles[positionComponent.position.x][positionComponent.position.y];
-
-		//Remove the entity from the tile it was standing on
-		currentTile.remove(entity);
-
-	}
-
-};
-
-//Export the Browserify module
-module.exports = Combat;
+    currentTile.remove(entity);
+  }
+}

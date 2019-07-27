@@ -1,164 +1,114 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
 /**
- * Queue constructor
- *
- * @class Queue
- * @classdesc Stores events and is able to retrieve them based on their time
+ * Stores events and is able to retrieve them based on their time.
  */
-var Queue = function() {
+export class Queue {
+  constructor() {
+    /**
+     * @property {Number} time - Every queue starts at time zero.
+     */
+    this.time = 0;
 
-	/**
-	 * @property {Number} time - Every queue starts at time zero
-	 */
-	this.time = 0;
+    /**
+     * @property {Array} events - The array with all the events.
+     */
+    this.events = [];
 
-	/**
-	 * @property {Array} events - The array with all the events
-	 */
-	this.events = [];
+    /**
+     * @property {Array} eventTimes - The array with all the times of the events.
+     */
+    this.eventTimes = [];
+  }
 
-	/**
-	 * @property {Array} eventTimes - The array with all the times of the events
-	 */
-	this.eventTimes = [];
+  /**
+   * Returns the elapsed time since the beginning of this queue.
+   *
+   * @public
+   *
+   * @return {Number} The elapsed time.
+   */
+  getTime() {
+    return this.time;
+  }
 
-};
+  /**
+   * Clear all events that are queued.
+   *
+   * @public
+   */
+  clear() {
+    this.events = [];
+    this.eventTimes = [];
+  }
 
-Queue.prototype = {
+  /**
+   * Function to call when you want to follow a specific entity.
+   *
+   * @public
+   *
+   * @param {Entity} event - The event that is being added to the queue.
+   * @param {Number} time - The time on which this event should be executed.
+   */
+  add(event, time) {
+    const index = this.events.length;
 
-	/**
-	 * Returns the elapsed time since the beginning of this queue
-	 * @public
-	 *
-	 * @return {Number} The elapsed time
-	 */
-	getTime: function() {
+    for (let i = 0; i < this.eventTimes.length; i++) {
+      // If the current events time is bigger than the supplied time we have to insert the new event here
+      if (this.eventTimes[i] > time) {
+        index = i;
 
-		//Return the time as an number
-		return this.time;
+        break;
+      }
+    }
 
-	},
+    this.events.splice(index, 0, event);
 
-	/**
-	 * Clear all events that are queued
-	 * @public
-	 */
-	clear: function() {
+    this.eventTimes.splice(index, 0, time);
+  }
 
-		this.events = [];
-		this.eventTimes = [];
+  /**
+   * Returns the next entity after removing it from the queue.
+   *
+   * @public
+   *
+   * @return {Entity} The next entity from the queue.
+   */
+  get() {
+    if (this.events.length === 0) {
+      return null;
+    }
 
-	},
+    const time = this.eventTimes.splice(0, 1)[0];
 
-	/**
-	 * Function to call when you want to follow a specific entity
-	 * @public
-	 *
-	 * @param {Entity} event - The event that is being added to the queue
-	 * @param {Number} time - The time on which this event should be executed
-	 */
-	add: function(event, time) {
+    if (time > 0) {
+      this.time += time;
 
-		//Set the index variable to the total amount of all current events
-		var index = this.events.length;
+      for (let i = 0; i < this.eventTimes.length; i++) {
+        this.eventTimes[i] -= time;
+      }
+    }
 
-		//Loop through all the current event times
-		for(var i = 0; i < this.eventTimes.length; i++) {
+    return this.events.splice(0, 1)[0];
+  }
 
-			//If the current events time is bigger than the supplied time
-			//we have to insert the new event here
-			if(this.eventTimes[i] > time) {
+  /**
+   * Remove a specific event from the queue.
+   *
+   * @public
+   *
+   * @param {Entity} event - The event that is being added to the queue.
+   *
+   * @return {Boolean} True if successfully removed, false if failed.
+   */
+  remove(event) {
+    const index = this.events.indexOf(event);
 
-				//Set the index variable to this number
-				index = i;
+    if (index === -1) {
+      return false;
+    }
 
-				//Stop looping because we have found the insert place
-				break;
+    this.events.splice(index, 1);
+    this.eventTimes.splice(index, 1);
 
-			}
-
-		}
-
-		//Insert the supplied event in the array
-		this.events.splice(index, 0, event);
-
-		//Insert the supplied time in the array
-		this.eventTimes.splice(index, 0, time);
-
-	},
-
-	/**
-	 * Returns the next entity after removing it from the queue
-	 * @public
-	 *
-	 * @return {Entity} The next entity from the queue
-	 */
-	get: function() {
-
-		//If there aren't any events, return null
-		if(this.events.length === 0) {
-
-			return null;
-
-		}
-
-		//Get the first eventTime from the array and remove it from the array
-		var time = this.eventTimes.splice(0, 1)[0];
-
-		//If the time is greater than zero, advance the time
-		if(time > 0) {
-
-			//Advance the time by the time the current event takes
-			this.time += time;
-
-			//Loop through all remaining events and decrease their time
-			for(var i = 0; i < this.eventTimes.length; i++) {
-
-				//Decrease the future times with the time the current event takes
-				this.eventTimes[i] -= time;
-
-			}
-
-		}
-
-		//Return the first event and remove it from the queue
-		return this.events.splice(0, 1)[0];
-
-	},
-
-	/**
-	 * Remove a specific event from the queue
-	 * @public
-	 *
-	 * @param {Entity} event - The event that is being added to the queue
-	 *
-	 * @return {Boolean} True if successfully removed, false if failed
-	 */
-	remove: function(event) {
-
-		//Get the position of the event supplied
-		var index = this.events.indexOf(event);
-
-		//If the supplied event isn't in the queue, return false
-		if(index === -1) {
-
-			return false;
-
-		}
-
-		//Remove the event from the queue and the time array
-		this.events.splice(index, 1);
-		this.eventTimes.splice(index, 1);
-
-		//We successfully removed the event
-		return true;
-
-	}
-
-};
-
-//Export the Browserify module
-module.exports = Queue;
-
+    return true;
+  }
+}

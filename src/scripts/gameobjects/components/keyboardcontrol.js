@@ -1,259 +1,206 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
-//Require necessary modules
-var Vector2 = require('../../geometry/vector2.js').Vector2;
+import { Vector2 } from '../../geometry/vector2.js';
 
 /**
- * KeyboardControl Component constructor
- *
- * @class KeyboardControl
- * @classdesc An component that tells the system that this entity can be controlled with the keyboard
- *
- * @param {Game} game - Reference to the current game object
- * @param {Entity} entity - Reference to the entity that has this component
- * @param {Object} controls - Associative array with every control that this entity uses
+ * An component that tells the system that this entity can be controlled with the keyboard.
+ * 
+ * @param {Game} game - Reference to the current game object.
+ * @param {Entity} entity - Reference to the entity that has this component.
+ * @param {Object} controls - Associative array with every control that this entity uses.
  */
-var KeyboardControl = function(game, entity, controls) {
+export class KeyboardControl {
+  constructor(game, entity, controls) {
+    /**
+     * @property {String} name - The name of this system. This field is always required!
+     */
+    this.name = 'keyboardControl';
 
-	/**
-	 * @property {String} name - The name of this system. This field is always required!
-	 */
-	this.name = 'keyboardControl';
+    /**
+     * @property {Entity} entity - Reference to the entity that has this component.
+     */
+    this.entity = entity;
 
-	/**
-	 * @property {Entity} entity - Reference to the entity that has this component
-	 */
-	this.entity = entity;
+    /**
+     * @property {Game} game - Reference to the current game object.
+     */
+    this.game = game;
 
-	/**
-	 * @property {Game} game - Reference to the current game object
-	 */
-	this.game = game;
+    /**
+     * @property {Array} controls - Associative array with every control that this entity uses.
+     */
+    this.controls = controls;
 
-	/**
-	 * @property {Array} controls - Associative array with every control that this entity uses
-	 */
-	this.controls = controls;
+    /**
+     * @property {Keyboard} keyboard - Reference to the keyboard object.
+     */
+    this.keyboard = game.keyboard;
 
-	/**
-	 * @property {Keyboard} keyboard - Reference to the keyboard object
-	 */
-	this.keyboard = game.keyboard;
+    /**
+     * @property {Scheduler} scheduler - Reference to the scheduler object.
+     */
+    this.scheduler = game.scheduler;
 
-	/**
-	 * @property {Scheduler} scheduler - Reference to the scheduler object
-	 */
-	this.scheduler = game.scheduler;
+    this.initialize();
+  }
 
-	//Initialize the component
-	this.initialize();
+  /**
+   * Adds the event listener for keyboards events on this entity.
+   *
+   * @private
+   */
+  initialize() {
+    for (let key in this.controls) {
+      if (this.controls.hasOwnProperty(key)) {
+        switch (key) {
+          case 'left':
+          case 'right':
+          case 'up':
+          case 'down':
+            const directionKey = this.keyboard.getKey(this.controls[key]);
 
-};
+            directionKey.onDown.on(
+              this.controls[key],
+              this.newPosition.bind(this, key),
+              this,
+            );
+            break;
 
-KeyboardControl.prototype = {
+          case 'pickup':
+            const pickUpKey = this.keyboard.getKey(this.controls[key]);
 
-	/**
-	 * The 'constructor' for this component
-	 * Adds the event listener for keyboards events on this entity
-	 * @private
-	 */
-	initialize: function() {
+            pickUpKey.onDown.on(
+              this.controls[key],
+              this.pickUp.bind(this),
+              this,
+            );
 
-		//Loop through each control keycode of this entity
-		for(var key in this.controls) {
+            break;
 
-			//Make sure that obj[key] belongs to the object and was not inherited
-			if(this.controls.hasOwnProperty(key)) {
+          case 'dropdown':
+            const dropDownKey = this.keyboard.getKey(this.controls[key]);
 
-				switch(key) {
+            dropDownKey.onDown.on(
+              this.controls[key],
+              this.dropDown.bind(this),
+              this,
+            );
 
-					case("left"):
-					case("right"):
-					case("up"):
-					case("down"):
+            break;
 
-						//Add up key and tell it to move the entities up when it hits
-						var directionKey = this.keyboard.getKey(this.controls[key]);
+          case 'equip1':
+          case 'equip2':
+          case 'equip3':
+          case 'equip4':
+          case 'equip5':
+          case 'equip6':
+          case 'equip7':
+          case 'equip8':
+          case 'equip9':
+            const equipKey = this.keyboard.getKey(this.controls[key]);
 
-						//Attach the new position function to the keydown event
-						directionKey.onDown.on(this.controls[key], this.newPosition.bind(this, key), this);
-						break;
+            equipKey.onDown.on(
+              this.controls[key],
+              this.equip.bind(this, key),
+              this,
+            );
 
-					case("pickup"):
+            break;
 
-						//Add up key and tell it to pick up the entities when it hits
-						var pickUpKey = this.keyboard.getKey(this.controls[key]);
+          case 'wait':
+            const waitKey = this.keyboard.getKey(this.controls[key]);
 
-						//Attach the pick up function to the keydown event
-						pickUpKey.onDown.on(this.controls[key], this.pickUp.bind(this), this);
+            waitKey.onDown.on(this.controls[key], this.wait.bind(this), this);
 
-						break;
-					
-					case("dropdown"):
-
-						//Add up key and tell it to drop down the entities when it hits
-						var dropDownKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the drop down function to the keydown event
-						dropDownKey.onDown.on(this.controls[key], this.dropDown.bind(this), this);
-
-						break;
-					
-					case("equip1"):
-					case("equip2"):
-					case("equip3"):
-					case("equip4"):
-					case("equip5"):
-					case("equip6"):
-					case("equip7"):
-					case("equip8"):
-					case("equip9"):
-
-						//Add up key and tell it to equip the entities when it hits
-						var equipKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the equip function to the keydown event
-						equipKey.onDown.on(this.controls[key], this.equip.bind(this, key), this);
-
-						break;
-
-					case("wait"):
-
-						//Add up key and tell it to wait the entities when it hits
-						var waitKey = this.keyboard.getKey(this.controls[key]);
-
-						//Attach the wait function to the keydown event
-						waitKey.onDown.on(this.controls[key], this.wait.bind(this), this);
-
-						break;
-
-				}
-
-			}
-
-		}
-
-	},
-
-	/**
-	 * The function that gets called when a player moves
-	 * @protected
-	 *
-	 * @param {String} direction - The direction the entities are being moved
-	 */
-	newPosition: function(direction) {
-
-		//Define variables
-		var movement;
-
-		//Check which controls are being pressed and update the player accordingly
-		switch(direction) {
-
-			case ("left"):
-
-				movement = new Vector2(-1, 0);
-
-				break;
-
-			case ("up"):
-
-				movement = new Vector2(0, -1);
-
-				break;
-
-			case ("right"):
-
-				movement = new Vector2(1, 0);
-
-				break;
-
-			case ("down"):
-
-				movement = new Vector2(0, 1);
-
-				break;
-
-		}
-
-		//Get the components
-		var positionComponent = this.entity.getComponent("position");
-
-		//Calculate the new position
-		var newPosition = positionComponent.position.combine(movement);
-
-		//Tell the movement system that you want to move to the new position
-		this.game.staticSystems.movementSystem.handleSingleEntity(this.entity, newPosition);
-
-        //Loop through each dynamic system
-        for(var s = 0; s < this.game.dynamicSystems.length; s++) {
-
-            //Update the current system
-            this.game.dynamicSystems[s].update();
-
+            break;
         }
+      }
+    }
+  }
 
-		//Unlock the scheduler because the player has moved
-		this.scheduler.unlock();
+  /**
+   * The function that gets called when a player moves.
+   *
+   * @private
+   *
+   * @param {String} direction - The direction the entities are being moved.
+   */
+  newPosition(direction) {
+    let movement;
 
-	},
+    switch (direction) {
+      case 'left':
+        movement = new Vector2(-1, 0);
 
-	/**
-	 * Function that is bound to the 'pickup' key and gets
-	 * executed every time the user presses it.
-	 * @protected
-	 */
-	pickUp: function() {
+        break;
 
-		//Tell the inventory system to handle a pickup for this entity
-		this.game.staticSystems.inventorySystem.pickUp(this.entity, false);
+      case 'up':
+        movement = new Vector2(0, -1);
 
-	},
-	
-	/**
-	 * Function that is bound to the 'dropdown' key and gets
-	 * executed every time the user presses it.
-	 * @protected
-	 */
-	dropDown: function() {
+        break;
 
-		//Tell the inventory system to handle a dropdown for this entity
-		this.game.staticSystems.inventorySystem.dropDown(this.entity);
+      case 'right':
+        movement = new Vector2(1, 0);
 
-	},
+        break;
 
-	/**
-	 * The function that gets called when a player equips item
-	 * @protected
-	 *
-	 * @param {String} slot - The slot from quickslot bar the entities are being equiped
-	 */
-	equip: function(slot) {
+      case 'down':
+        movement = new Vector2(0, 1);
 
-		//Get text correspondent to this slot
-		var text = slot.substr(slot.length - 1);
-		
-		//Get index correspondent with this slot
-		var index = parseInt(text) - 1;
+        break;
+    }
 
-		//Tell the inventory system to handle a equip for this entity
-		this.game.staticSystems.inventorySystem.equip(this.entity, index);
+    const positionComponent = this.entity.getComponent('position');
 
-	},
+    const newPosition = positionComponent.position.combine(movement);
 
-	/**
-	 * Function that is bound to the 'wait' key and makes the player skip a turn
-	 * @protected
-	 */
-	wait: function() {
+    this.game.staticSystems.movementSystem.handleSingleEntity(
+      this.entity,
+      newPosition,
+    );
 
-		//Unlock the scheduler because the player has moved
-		this.scheduler.unlock();
+    for (let s = 0; s < this.game.dynamicSystems.length; s++) {
+      this.game.dynamicSystems[s].update();
+    }
 
-	}
+    this.scheduler.unlock();
+  }
 
-};
+  /**
+   * Function that is bound to the 'pickup' key and gets executed every time the user presses it.
+   *
+   * @private
+   */
+  pickUp() {
+    this.game.staticSystems.inventorySystem.pickUp(this.entity, false);
+  }
 
-//Export the Browserify module
-module.exports = KeyboardControl;
+  /**
+   * Function that is bound to the 'dropdown' key and gets executed every time the user presses it.
+   *
+   * @private
+   */
+  dropDown() {
+    this.game.staticSystems.inventorySystem.dropDown(this.entity);
+  }
 
+  /**
+   * Function that is bound to the 'equip' key and gets executed every time the user presses it.
+   *
+   * @private
+   */
+  equip(slot) {
+    const text = slot.substr(slot.length - 1);
+
+    const index = parseInt(text) - 1;
+
+    this.game.staticSystems.inventorySystem.equip(this.entity, index);
+  }
+
+  /**
+   * Function that is bound to the 'wait' key and makes the player skip a turn
+   *
+   * @private
+   */
+  wait() {
+    this.scheduler.unlock();
+  }
+}

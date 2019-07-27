@@ -1,70 +1,95 @@
 import { Entity } from '../gameobjects/entity.js';
 
+/**
+ * The object that holds multiple entities and is able to search them.
+ *
+ * @param {Game} game - A reference to the current game object
+ */
 export class Group extends PIXI.Container {
-	constructor(game) {
-		super();
+  constructor(game) {
+    super();
 
-		this.game = game;
-		this.entities = [];
-	}
+    /**
+     * @property {Game} game - Reference to the current game object
+     */
+    this.game = game;
 
-	add(entity) {
-		if (!entity instanceof Entity) {
-			return;
-		}
-	
-		this.addChild(entity.sprite);
-	
-		if (entity.hasComponent('position')) {
-			const positionComponent = entity.getComponent('position');
-	
-			const newPosition = {
-				x: positionComponent.position.x * 16,
-				y: positionComponent.position.y * 16
-			};
-	
-			entity.sprite.position = new PIXI.Point(newPosition.x, newPosition.y);
-	
-		}
-	
-		this.entities.push(entity);
-	}
+    /**
+     * @property {Array} entities - Collection of all the entities in this group
+     */
+    this.entities = [];
+  }
 
-	remove(entity) {
-		const index = this.entities.indexOf(entity);
-	
-		if (index === -1) {
-			return;
-		}
-	
-		this.removeChild(entity.sprite);
-	
-		this.entities.splice(index, 1);
-	}
+  /**
+   * Function to add a new entity to this group.
+   * 
+   * @public
+   *
+   * @param {Entity} entity - A reference to entity being added.
+   */
+  add(entity) {
+    if (!entity instanceof Entity) {
+      return;
+    }
 
-	get() {
-		const entitiesMatch = [];
-	
-		for(let i = 0; i < this.entities.length; i++) {
-			const isThere = [];
-	
-			for(let a = 0; a < arguments.length; a++) {
-	
-				if (this.entities[i].components[arguments[a]]) {
-					isThere.push(1);
-				}
-	
-			}
-	
-			if (isThere.length === arguments.length) {
-				entitiesMatch.push(this.entities[i]);
-			}
-		}
+    this.addChild(entity.sprite);
 
-		return entitiesMatch;
-	}
-};
+    if (entity.hasComponent('position')) {
+      const positionComponent = entity.getComponent('position');
 
-//Inherit the prototype from the PIXI.Container
-// Group.prototype = Object.create(PIXI.Container.prototype);
-// Group.prototype.constructor = Group;
+      const newPosition = {
+        x: positionComponent.position.x * 16,
+        y: positionComponent.position.y * 16,
+      };
+
+      entity.sprite.position = new PIXI.Point(newPosition.x, newPosition.y);
+    }
+
+    this.entities.push(entity);
+  }
+
+  /**
+   * Function to remove an entity from this group.
+   * 
+   * @public
+   *
+   * @param {Entity} entity - A reference to entity being removed.
+   */
+  remove(entity) {
+    const index = this.entities.indexOf(entity);
+
+    if (index === -1) {
+      return;
+    }
+
+    this.removeChild(entity.sprite);
+
+    this.entities.splice(index, 1);
+  }
+
+  /**
+   * Function to return all entities with certain components
+   * @public
+   *
+   * @return {Array} The array with all matching entities
+   */
+  get() {
+    const entitiesMatch = [];
+
+    for (let i = 0; i < this.entities.length; i++) {
+      const isThere = [];
+
+      for (let a = 0; a < arguments.length; a++) {
+        if (this.entities[i].components[arguments[a]]) {
+          isThere.push(1);
+        }
+      }
+
+      if (isThere.length === arguments.length) {
+        entitiesMatch.push(this.entities[i]);
+      }
+    }
+
+    return entitiesMatch;
+  }
+}

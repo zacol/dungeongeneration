@@ -1,224 +1,325 @@
-//Because Browserify encapsulates every module, use strict won't apply to the global scope and break everything
-'use strict';
-
-//Require necessary modules
-var Utils = require('./utils.js'),
-	UI = require('../ui/ui.js'),
-	Camera = require('./camera.js').Camera,
-	World = require('./world.js'),
-	SizeManager = require('./sizemanager.js').SizeManager,
-	Map = require('../tilemap/map.js').Map,
-	PlayerFactory = require('../factories/playerfactory.js').PlayerFactory,
-	ItemFactory = require('../factories/itemfactory.js').ItemFactory,
-	Vector2 = require('../geometry/vector2.js').Vector2,
-	Group = require('../gameobjects/group.js').Group,
-	Combat = require('../gameobjects/systems/combat.js'),
-	LightMap = require('../gameobjects/systems/lightmap.js'),
-	Movement = require('../gameobjects/systems/movement.js'),
-	Open = require('../gameobjects/systems/open.js'),
-	PathFinding = require('../gameobjects/systems/pathfinding.js'),
-	statusEffectsSystem = require('../gameobjects/systems/statuseffects.js'),
-	inventorySystem = require('../gameobjects/systems/inventory.js'),
-	MapFactory = require('../tilemap/mapfactory.js'),
-	MapDecorator = require('../tilemap/mapdecorator.js'),
-	Scheduler = require('../time/scheduler.js'),
-	Keyboard = require('../input/keyboard.js').Keyboard,
-	StatusFire = require('../gameobjects/statuseffects/fire.js');
+import { UI } from'../ui/ui.js';
+import { World } from'./world.js';
+import { SizeManager } from'./sizemanager.js';
+import { Map } from'../tilemap/map.js';
+import { PlayerFactory } from'../factories/playerfactory.js';
+import { Vector2 } from'../geometry/vector2.js';
+import { Group } from'../gameobjects/group.js';
+import { Combat } from'../gameobjects/systems/combat.js';
+import { LightMap } from'../gameobjects/systems/lightmap.js';
+import { Movement } from'../gameobjects/systems/movement.js';
+import { Open } from'../gameobjects/systems/open.js';
+import { PathFinding } from'../gameobjects/systems/pathfinding.js';
+import { StatusEffectsSystem } from'../gameobjects/systems/statuseffects.js';
+import { Inventory } from'../gameobjects/systems/inventory.js';
+import { MapFactory } from'../tilemap/mapfactory.js';
+import { MapDecorator } from'../tilemap/mapdecorator.js';
+import { Scheduler } from'../time/scheduler.js';
+import { Keyboard } from'../input/keyboard.js';
+import { StatusFire } from'../gameobjects/statuseffects/fire.js';
 
 /**
- * Game Constructor
- *
- * @class Game
- * @classdesc The heart of this roguelike game! In here we provide access to
- * all the other objects and function, and we handle the startup of the game
- *
- * @param {Object} userSettings - The settings that the user provides
+ * The heart of this roguelike game! In here we provide access to
+ * all the other objects and function, and we handle the startup of the game.
+ * 
+ * @param {Object} userSettings - The settings that the user provides.
  */
 export class Game {
-	constructor(userSettings) {
-		this.isInitialized = false;
-		this.isActive = false;
-		this.map = null;
-		this.mapFactory = null;
-		this.mapDecorator = null;
-		this.keyboard = null;
-		this.scheduler = null;
-		this.staticSystems = {};
-		this.dynamicSystems = [];
-		this.player = null;
-		this.world = null;
-		this.UI = null;
-		this.sizeManager = null;
-		this.stage = null;
-		this.renderer = null;
-		this.settings = {
-			tilesX: 60, //The number of horizontal tiles on this map
-			tilesY: 40, //The number of vertical tiles on this map
-			zoom: 3 //The scale of the map
-		};
-		this.settings = Utils.extend(this.settings, userSettings);
-		this.load();
-	}
+  constructor(userSettings) {
+    /**
+     * @property {Boolean} isInitialized - Boolean to see if the game is already initialized.
+     */
+    this.isInitialized = false;
 
-	load() {
-		PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+    /**
+     * @property {Boolean} isActive - Boolean to see if the game is currently active.
+     */
+    this.isActive = false;
 
-		const loader = PIXI.loader;
+    /**
+     * @property {Map} map - Reference to the current map.
+     */
+    this.map = null;
 
-        loader.add([
-            'assets/tilesets/dungeon.json',
-            'assets/sprites/entities.json',
-            'assets/sprites/items.json',
-            'assets/tilesets/decoration.json',
-            'assets/tilesets/ui.json'
-        ]);
+    /**
+     * @property {MapFactory} mapFactory - The mapFactory is responsible for creating rooms and corridors on this map.
+     */
+    this.mapFactory = null;
 
-        loader.once('complete', this.initialize.bind(this));
+    /**
+     * @property {MapDecorator} mapDecorator - The mapDecorator is responsible for decorating the map with props and enemies.
+     */
+    this.mapDecorator = null;
 
-		loader.load();
-	}
+    /**
+     * @property {Keyboard} keyboard - Reference to the keyboard object.
+     */
+    this.keyboard = null;
 
-	initialize() {
-		if(this.isInitialized) {
-			return;
-		}
+    /**
+     * @property {Scheduler} scheduler - Reference to the Scheduler object.
+     */
+    this.scheduler = null;
 
-		this.stage = new PIXI.Container();
+    /**
+     * @property {Object} staticSystems - An object with all the static systems.
+     */
+    this.staticSystems = {};
 
-        this.sizeManager = new SizeManager(this);
+    /**
+     * @property {Array} dynamicSystems - An array with all the current systems that need to be looped.
+     */
+    this.dynamicSystems = [];
 
-		this.renderer = PIXI.autoDetectRenderer(this.sizeManager.width, this.sizeManager.height);
+    /**
+     * @property {Entity} player - Reference to the player object.
+     */
+    this.player = null;
 
-		document.body.appendChild(this.renderer.view);
+    /**
+     * @property {World} world - Reference to the World object.
+     */
+    this.world = null;
 
-		this.world = new World(this);
+    /**
+     * @property {UI} stage - The UI object.
+     */
+    this.UI = null;
 
-		this.keyboard = new Keyboard();
+    /**
+     * @property {PIXI.Stage} stage - The Pixi stage object.
+     */
+    this.stage = null;
 
-		this.scheduler = new Scheduler();
+    /**
+     * @property {SizeManager} sizeManager - Reference to the Size Manager object.
+     */
+    this.sizeManager = null;
 
-		this.initializeMap();
+    /**
+     * @property {PIXI.Renderer} renderer - The Pixi renderer object.
+     */
+    this.renderer = null;
 
-		this.staticSystems.movementSystem = new Movement(this);
+    /**
+     * @property {Object} settings - The default settings.
+     */
+    this.settings = {
+      tilesX: 60, //The number of horizontal tiles on this map
+      tilesY: 40, //The number of vertical tiles on this map
+      zoom: 3, //The scale of the map
+    };
 
-		this.staticSystems.pathfindingSystem = new PathFinding(this);
+    this.settings = {
+      ...this.settings,
+      ...userSettings,
+    };
 
-		this.staticSystems.combatSystem = new Combat(this);
+    this.load();
+  }
 
-		this.staticSystems.openSystem = new Open(this);
+  /**
+   * Pre-load all assets required in the game.
+   * 
+   * @private
+   */
+  load() {
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 
-		this.staticSystems.statusEffectsSystem = new statusEffectsSystem(this);
+    const loader = PIXI.loader;
 
-		this.staticSystems.inventorySystem = new inventorySystem(this);
+    loader.add([
+      'assets/tilesets/dungeon.json',
+      'assets/sprites/entities.json',
+      'assets/sprites/items.json',
+      'assets/tilesets/decoration.json',
+      'assets/tilesets/ui.json',
+    ]);
 
-		this.dynamicSystems.push(new LightMap(this));
+    loader.once('complete', this.initialize.bind(this));
 
-		this.initializePlayer();
+    loader.load();
+  }
 
-		this.UI = new UI(this);
+  /**
+   * Initialize the game, create all objects.
+   *
+   * @private
+   */
+  initialize() {
+    if (this.isInitialized) {
+      return;
+    }
 
-		this.isInitialized = true;
+    this.stage = new PIXI.Container();
 
-		this.isActive = true;
+    this.sizeManager = new SizeManager(this);
 
-        this.update();
+    this.renderer = PIXI.autoDetectRenderer(
+      this.sizeManager.width,
+      this.sizeManager.height,
+    );
 
-        for(var s = 0; s < this.dynamicSystems.length; s++) {
-            this.dynamicSystems[s].update();
-        }
-	}
+    document.body.appendChild(this.renderer.view);
 
-	initializeMap() {
-		this.map = new Map(this);
+    this.world = new World(this);
 
-		this.mapFactory = new MapFactory(this);
+    this.keyboard = new Keyboard();
 
-		this.mapDecorator = new MapDecorator(this);
+    this.scheduler = new Scheduler();
 
-		this.map.entities = new Group(this);
+    this.initializeMap();
 
-		this.mapFactory.generateRooms();
+    this.staticSystems.movementSystem = new Movement(this);
 
-		this.mapDecorator.decorateMap();
+    this.staticSystems.pathfindingSystem = new PathFinding(this);
 
-		this.world.addChild(this.map.entities);
-	}
+    this.staticSystems.combatSystem = new Combat(this);
 
-	initializePlayer() {
-        const startPosition = new Vector2(this.map.entrance.x, this.map.entrance.y);
+    this.staticSystems.openSystem = new Open(this);
 
-        const playerControls = {
-            "left": 65,
-            "right": 68,
-            "up": 87,
-            "down": 83,
-            "pickup": 69,
-            "dropdown": 82,
-			"wait": 32,
-			"equip1": 49,
-			"equip2": 50,
-			"equip3": 51,
-			"equip4": 52,
-			"equip5": 53,
-			"equip6": 54,
-			"equip7": 55,
-			"equip8": 56,
-			"equip9": 57,
-        };
+    this.staticSystems.statusEffectsSystem = new StatusEffectsSystem(this);
 
-        this.player = PlayerFactory.newPlayerWarrior(this, startPosition, playerControls);
+    this.staticSystems.inventorySystem = new Inventory(this);
 
-		this.map.entities.add(this.player);
+    this.dynamicSystems.push(new LightMap(this));
 
-		const startingTile = this.map.tiles[startPosition.x][startPosition.y];
+    this.initializePlayer();
 
-		startingTile.add(this.player);
+    this.UI = new UI(this);
 
-		this.staticSystems.statusEffectsSystem.addStatusEffect(this.player, new StatusFire());
+    this.isInitialized = true;
 
-		this.scheduler.add(this.player, true);
+    this.isActive = true;
 
-		this.world.camera.follow(this.player, this.sizeManager.width / 2, this.sizeManager.height / 2);
-	}
+    this.update();
 
-	update() {
-		this.UI.stats.begin();
+    for (let s = 0; s < this.dynamicSystems.length; s++) {
+      this.dynamicSystems[s].update();
+    }
+  }
 
-		if(this.isInitialized && !this.isActive) {
-			this.restart();
-		}
+  /**
+   * Creates and populates a new map.
+   *
+   * @private
+   */
+  initializeMap() {
+    this.map = new Map(this);
 
-		requestAnimationFrame(this.update.bind(this));
+    this.mapFactory = new MapFactory(this);
 
-		while(!this.scheduler.lockCount) {
-			this.scheduler.tick();
-		}
+    this.mapDecorator = new MapDecorator(this);
 
-		this.world.update();
+    this.map.entities = new Group(this);
 
-		this.renderer.render(this.stage);
+    this.mapFactory.generateRooms();
 
-		this.UI.stats.end();
+    this.mapDecorator.decorateMap();
 
-	}
+    this.world.addChild(this.map.entities);
+  }
 
-	restart() {
-		this.scheduler.clear();
+  /**
+   * Initializes and adds the player to the game.
+   *
+   * @private
+   */
+  initializePlayer() {
+    const startPosition = new Vector2(this.map.entrance.x, this.map.entrance.y);
 
-        this.stage.removeChildren();
+    const playerControls = {
+      left: 65,
+      right: 68,
+      up: 87,
+      down: 83,
+      pickup: 69,
+      dropdown: 82,
+      wait: 32,
+      equip1: 49,
+      equip2: 50,
+      equip3: 51,
+      equip4: 52,
+      equip5: 53,
+      equip6: 54,
+      equip7: 55,
+      equip8: 56,
+      equip9: 57,
+    };
 
-        this.world = new World(this);
+    this.player = PlayerFactory.newPlayerWarrior(
+      this,
+      startPosition,
+      playerControls,
+    );
 
-		this.initializeMap();
-		this.initializePlayer();
+    this.map.entities.add(this.player);
 
-        this.UI = new UI(this);
+    const startingTile = this.map.tiles[startPosition.x][startPosition.y];
 
-		this.staticSystems.pathfindingSystem.game = this;
-		this.staticSystems.pathfindingSystem.initialize();
+    startingTile.add(this.player);
 
-		this.UI.textLog.clear();
+    this.staticSystems.statusEffectsSystem.addStatusEffect(
+      this.player,
+      new StatusFire(),
+    );
 
-		this.isActive = true;
-	}
-};
+    this.scheduler.add(this.player, true);
+
+    this.world.camera.follow(
+      this.player,
+      this.sizeManager.width / 2,
+      this.sizeManager.height / 2,
+    );
+  }
+
+  /**
+   * The game loop - All the functions that need to be executed every time the game updates.
+   *
+   * @private
+   */
+  update() {
+    this.UI.stats.begin();
+
+    if (this.isInitialized && !this.isActive) {
+      this.restart();
+    }
+
+    requestAnimationFrame(this.update.bind(this));
+
+    while (!this.scheduler.lockCount) {
+      this.scheduler.tick();
+    }
+
+    this.world.update();
+
+    this.renderer.render(this.stage);
+
+    this.UI.stats.end();
+  }
+
+  /**
+   * Restarts the game with a fresh map and player.
+   *
+   * @private
+   */
+  restart() {
+    this.scheduler.clear();
+
+    this.stage.removeChildren();
+
+    this.world = new World(this);
+
+    this.initializeMap();
+    this.initializePlayer();
+
+    this.UI = new UI(this);
+
+    this.staticSystems.pathfindingSystem.game = this;
+    this.staticSystems.pathfindingSystem.initialize();
+
+    this.UI.textLog.clear();
+
+    this.isActive = true;
+  }
+}
