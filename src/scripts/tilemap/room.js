@@ -4,7 +4,7 @@ import { Utils } from '../core/utils.js';
 
 /**
  * A room object that creates his own layout.
- * 
+ *
  * @param {Number} x - The x coordinate of the top left corner of this room.
  * @param {Number} y - The y coordinate of the top left corner of this room.
  * @param {Number} w - The width of this room.

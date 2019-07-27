@@ -1,6 +1,6 @@
 /**
  * An Vector2 Object.
- * 
+ *
  * @param {Number} x - The x coordinate of this vector2 object.
  * @param {Number} y - The y coordinate of this vector2 object.
  */

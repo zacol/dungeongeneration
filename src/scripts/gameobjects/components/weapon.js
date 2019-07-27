@@ -1,6 +1,6 @@
 /**
  * The weapon component holds information about the weapon.
- * 
+ *
  * @param {Number} damage - The damage that this weapon does.
  */
 export class Weapon {

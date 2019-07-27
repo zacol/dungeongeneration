@@ -1,6 +1,6 @@
 /**
  * A single tile on the map, contains data about it's location and origin.
- * 
+ *
  * @param {Number} type - The kind of tile: wall, floor, void, etc.
  * @param {Boolean} blockLight - Does this tile block light, yes or no.
  * @param {Room} room - The room that this tile belongs to.

@@ -2,7 +2,7 @@ import { Boundary } from '../geometry/boundary.js';
 
 /**
  * A camera that follows an object in the viewport on the canvas.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  * @param {Vector2} position - The position object of this entity.
  */
@@ -50,7 +50,7 @@ export class Camera {
       this.position.x * (game.settings.tileSize * this.game.settings.zoom),
       this.position.y * (game.settings.tileSize * this.game.settings.zoom),
       this.viewportWidth,
-      this.viewportHeight
+      this.viewportHeight,
     );
 
     /**
@@ -60,7 +60,7 @@ export class Camera {
       0,
       0,
       game.settings.tilesX * (game.settings.tileSize * this.game.settings.zoom),
-      game.settings.tilesY * (game.settings.tileSize * this.game.settings.zoom)
+      game.settings.tilesY * (game.settings.tileSize * this.game.settings.zoom),
     );
   }
 

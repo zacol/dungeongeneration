@@ -2,7 +2,7 @@ import { Event } from './event.js';
 
 /**
  * An object that handles a single key on a keyboard.
- * 
+ *
  * @param {Number} keycode - The keycode of this specific key.
  */
 export class Key {

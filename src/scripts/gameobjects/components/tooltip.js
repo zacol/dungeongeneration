@@ -1,6 +1,6 @@
 /**
  * A tooltip that will show up when the player hovers his mouse over the entity.
- * 
+ *
  * @param {String} title - The title of the tooltip
  * @param {String} type - The type of entity
  * @param {String} description - The description of this entity

@@ -2,7 +2,7 @@ import { Event } from '../../input/event.js';
 
 /**
  * An component that tells the system that this entity can fight.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  * @param {Array} canAttackTypes - Array of entity types that can be attacked.
  */

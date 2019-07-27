@@ -1,6 +1,6 @@
 /**
  * A component that tells the behaviour of an entity, is it aggressive, does it try to flee.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  * @param {Entity} entity - Reference to the entity that has this component.
  * @param {Function} func - The move functionality that is defined in moveBehaviours.js game.

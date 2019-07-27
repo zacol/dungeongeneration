@@ -1,6 +1,6 @@
 /**
  * The Lightsource component tells the system that this object emits light.
- * 
+ *
  * @param {Boolean} gradient - Should this lightsource render with a gradient.
  * @param {Number} radius - The radius of the light, how far does it shine it's light!
  */

@@ -1,6 +1,6 @@
 /**
  * The Inventory system handles grabbing/dropping items and manages other inventory actions.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  */
 export class Inventory {

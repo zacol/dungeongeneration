@@ -1,27 +1,27 @@
-import { UI } from'../ui/ui.js';
-import { World } from'./world.js';
-import { SizeManager } from'./sizemanager.js';
-import { Map } from'../tilemap/map.js';
-import { PlayerFactory } from'../factories/playerfactory.js';
-import { Vector2 } from'../geometry/vector2.js';
-import { Group } from'../gameobjects/group.js';
-import { Combat } from'../gameobjects/systems/combat.js';
-import { LightMap } from'../gameobjects/systems/lightmap.js';
-import { Movement } from'../gameobjects/systems/movement.js';
-import { Open } from'../gameobjects/systems/open.js';
-import { PathFinding } from'../gameobjects/systems/pathfinding.js';
-import { StatusEffectsSystem } from'../gameobjects/systems/statuseffects.js';
-import { Inventory } from'../gameobjects/systems/inventory.js';
-import { MapFactory } from'../tilemap/mapfactory.js';
-import { MapDecorator } from'../tilemap/mapdecorator.js';
-import { Scheduler } from'../time/scheduler.js';
-import { Keyboard } from'../input/keyboard.js';
-import { StatusFire } from'../gameobjects/statuseffects/fire.js';
+import { UI } from '../ui/ui.js';
+import { World } from './world.js';
+import { SizeManager } from './sizemanager.js';
+import { Map } from '../tilemap/map.js';
+import { PlayerFactory } from '../factories/playerfactory.js';
+import { Vector2 } from '../geometry/vector2.js';
+import { Group } from '../gameobjects/group.js';
+import { Combat } from '../gameobjects/systems/combat.js';
+import { LightMap } from '../gameobjects/systems/lightmap.js';
+import { Movement } from '../gameobjects/systems/movement.js';
+import { Open } from '../gameobjects/systems/open.js';
+import { PathFinding } from '../gameobjects/systems/pathfinding.js';
+import { StatusEffectsSystem } from '../gameobjects/systems/statuseffects.js';
+import { Inventory } from '../gameobjects/systems/inventory.js';
+import { MapFactory } from '../tilemap/mapfactory.js';
+import { MapDecorator } from '../tilemap/mapdecorator.js';
+import { Scheduler } from '../time/scheduler.js';
+import { Keyboard } from '../input/keyboard.js';
+import { StatusFire } from '../gameobjects/statuseffects/fire.js';
 
 /**
  * The heart of this roguelike game! In here we provide access to
  * all the other objects and function, and we handle the startup of the game.
- * 
+ *
  * @param {Object} userSettings - The settings that the user provides.
  */
 export class Game {
@@ -120,7 +120,7 @@ export class Game {
 
   /**
    * Pre-load all assets required in the game.
-   * 
+   *
    * @private
    */
   load() {

@@ -13,7 +13,7 @@ export class Open {
 
   /**
    * Performs the needed operations for this specific system on one entity.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -40,4 +40,4 @@ export class Open {
       ].blockLight = false;
     }
   }
-};
+}

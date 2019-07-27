@@ -25,10 +25,10 @@ export class MapDecorator {
   }
 
   /**
-	 * Perform the needed actions before decorating the map.
-	 * 
+   * Perform the needed actions before decorating the map.
+   *
    * @private
-	 */
+   */
   initialize() {
     // Filling the tileArray used by the auto tiling in the setTileNumbers function, a more detailed explanation can be found there.
     this.tileArray['wall_single'] = [206];
@@ -116,10 +116,10 @@ export class MapDecorator {
   }
 
   /**
-	 * A function that starts the decorating of the map, calling all the necessary functions.
-   * 
-	 * @public
-	 */
+   * A function that starts the decorating of the map, calling all the necessary functions.
+   *
+   * @public
+   */
   decorateMap() {
     this.placeEntrance();
     this.placeExit();
@@ -132,22 +132,22 @@ export class MapDecorator {
   }
 
   /**
-	 * This function sets the correct tileset row and number for each tile.
-	 *
-	 * The key of the tileArray is representing the tile on the tileset.
-	 * The values represent the results that can come out of the bitwise calculation of surrounding tiles.
-	 * Calculating these values is rather easy following this graph:
-	 *
-	 * 16 - 1 - 32
-	 *  8 - x - 2
-	 * 64 - 4 - 128
-	 *
-	 * X is the tile that is currently being checked. For every floor tile that surrounds the current tile
-	 * a certain value is added. For example: If there are floor tiles, above, left and bottom left of the current tile
-	 * you end up with the number 74. This always describes an unique layout on the map and therefore translates to a certain tile on the tileset.
-	 *
-	 * @private
-	 */
+   * This function sets the correct tileset row and number for each tile.
+   *
+   * The key of the tileArray is representing the tile on the tileset.
+   * The values represent the results that can come out of the bitwise calculation of surrounding tiles.
+   * Calculating these values is rather easy following this graph:
+   *
+   * 16 - 1 - 32
+   *  8 - x - 2
+   * 64 - 4 - 128
+   *
+   * X is the tile that is currently being checked. For every floor tile that surrounds the current tile
+   * a certain value is added. For example: If there are floor tiles, above, left and bottom left of the current tile
+   * you end up with the number 74. This always describes an unique layout on the map and therefore translates to a certain tile on the tileset.
+   *
+   * @private
+   */
   setTileNumbers() {
     const map = this.game.map;
 
@@ -239,10 +239,10 @@ export class MapDecorator {
   }
 
   /**
-	 * Get the first room on the roomsToExit list and turns it into the entrance room.
-	 * 
+   * Get the first room on the roomsToExit list and turns it into the entrance room.
+   *
    * @private
-	 */
+   */
   placeEntrance() {
     const entrancePosition = this.game.map.roomsToExit[0].getRandomPosition();
 
@@ -255,7 +255,7 @@ export class MapDecorator {
 
   /**
    * Get the last room on the roomsToExit list and turns it into the exit room.
-   * 
+   *
    * @private
    */
   placeExit() {
@@ -272,7 +272,7 @@ export class MapDecorator {
 
   /**
    * Generate some doors and spread them out over the map!
-   * 
+   *
    * @private
    */
   generateDoors() {
@@ -322,7 +322,7 @@ export class MapDecorator {
 
   /**
    * Place the entrance and exit objects on the map.
-   * 
+   *
    * @private
    */
   placeDoor(position, orientation) {
@@ -348,7 +348,7 @@ export class MapDecorator {
   /**
    * Populate the dungeon with enemies and or friendlies.
    * This function is due to some heavy changes.
-   * 
+   *
    * @private
    */
   populateDungeon() {

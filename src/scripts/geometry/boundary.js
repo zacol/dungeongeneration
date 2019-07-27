@@ -1,6 +1,6 @@
 /**
  * A rectangle that represents the whole map or the viewport of the camera.
- * 
+ *
  * @param {Number} left - The left position of this boundary, in pixels.
  * @param {Number} top - The top position of this boundary, in pixels.
  * @param {Number} width - The width of this boundary, in pixels.

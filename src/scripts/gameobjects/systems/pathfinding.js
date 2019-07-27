@@ -20,10 +20,10 @@ export class PathFinding {
 
     this.initialize();
   }
-  
+
   /**
    * Initialize the game, create all objects.
-   * 
+   *
    * @private
    */
   initialize() {
@@ -36,7 +36,7 @@ export class PathFinding {
 
   /**
    * Performs the needed operations for this specific system on one entity.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -82,7 +82,7 @@ export class PathFinding {
 
   /**
    * Function that handles the result of the EasyStar findPath function.
-   * 
+   *
    * @private
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -101,4 +101,4 @@ export class PathFinding {
       );
     }
   }
-};
+}

@@ -8,9 +8,9 @@ import { Vector2 } from '../../geometry/vector2.js';
 export class LightMap extends PIXI.ParticleContainer {
   constructor(game) {
     super(3000, {
-      alpha: true
+      alpha: true,
     });
-    
+
     /**
      * @property {Game} game - Reference to the current game object.
      */
@@ -19,7 +19,7 @@ export class LightMap extends PIXI.ParticleContainer {
     /**
      * @property {Object} mapSize - The size of the current map.
      */
-    this.mapSize = {x: game.map.settings.tilesX, y: game.map.settings.tilesY};
+    this.mapSize = { x: game.map.settings.tilesX, y: game.map.settings.tilesY };
 
     /**
      * @property {Object} tiles - Object that is being used to store tile data before returning it.
@@ -38,7 +38,7 @@ export class LightMap extends PIXI.ParticleContainer {
       [1, 0, 0, -1, -1, 0, 0, 1],
       [0, 1, -1, 0, 0, -1, 1, 0],
       [0, 1, 1, 0, 0, -1, -1, 0],
-      [1, 0, 0, 1, -1, 0, 0, -1]
+      [1, 0, 0, 1, -1, 0, 0, -1],
     ];
 
     /**
@@ -51,14 +51,14 @@ export class LightMap extends PIXI.ParticleContainer {
 
   /**
    * Initialize the layout of the lightmap.
-   * 
+   *
    * @private
    */
   initialize() {
-    for(let x = 0; x < this.game.map.settings.tilesX; x++) {
+    for (let x = 0; x < this.game.map.settings.tilesX; x++) {
       this.pixitiles[x] = [];
 
-      for(let y = 0; y < this.game.map.settings.tilesY; y++) {
+      for (let y = 0; y < this.game.map.settings.tilesY; y++) {
         this.pixitiles[x][y] = PIXI.Sprite.fromFrame('void.png');
 
         this.pixitiles[x][y].position.x = x * this.game.map.settings.tileSize;
@@ -73,14 +73,14 @@ export class LightMap extends PIXI.ParticleContainer {
 
   /**
    * Function that gets called when the game continues one tick.
-   * 
+   *
    * @public
    */
   update() {
-    if(this.game.isActive) {
-      const entities = this.game.map.entities.get("lightSource", "position");
+    if (this.game.isActive) {
+      const entities = this.game.map.entities.get('lightSource', 'position');
 
-      for(let i = 0; i < entities.length; i++) {
+      for (let i = 0; i < entities.length; i++) {
         this.handleSingleEntity(entities[i]);
       }
 
@@ -89,41 +89,46 @@ export class LightMap extends PIXI.ParticleContainer {
       this.clear();
       this.tilesLit = false;
     }
-  };
+  }
 
   /**
    * Performs the needed operations for this specific system on one entity.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - The entity that is being processed by this system.
    */
   handleSingleEntity(entity) {
-    const lightSourceComponent = entity.getComponent("lightSource");
-    const positionComponent = entity.getComponent("position");
+    const lightSourceComponent = entity.getComponent('lightSource');
+    const positionComponent = entity.getComponent('position');
 
-    const newLight = this.clear().concat(this.calculate(lightSourceComponent, positionComponent.position));
+    const newLight = this.clear().concat(
+      this.calculate(lightSourceComponent, positionComponent.position),
+    );
 
-    for(let l = 0; l < newLight.length; l++) {
+    for (let l = 0; l < newLight.length; l++) {
       if (!this.game.map.tiles[newLight[l].x][newLight[l].y].explored) {
-        this.pixitiles[newLight[l].x][newLight[l].y].alpha = 1 - newLight[l].lightLevel;
+        this.pixitiles[newLight[l].x][newLight[l].y].alpha =
+          1 - newLight[l].lightLevel;
 
         this.game.map.tiles[newLight[l].x][newLight[l].y].explored = true;
       } else {
         if (1 - newLight[l].lightLevel < 0.7) {
-          this.pixitiles[newLight[l].x][newLight[l].y].alpha = 1 - newLight[l].lightLevel;
-          this.game.map.tiles[newLight[l].x][newLight[l].y].lightLevel = newLight[l].lightLevel;
+          this.pixitiles[newLight[l].x][newLight[l].y].alpha =
+            1 - newLight[l].lightLevel;
+          this.game.map.tiles[newLight[l].x][newLight[l].y].lightLevel =
+            newLight[l].lightLevel;
         } else {
           this.pixitiles[newLight[l].x][newLight[l].y].alpha = 0.7;
           this.game.map.tiles[newLight[l].x][newLight[l].y].lightLevel = 0.7;
         }
       }
     }
-  };
+  }
 
   /**
    * Function that checks if a tile blocks light or not.
-   * 
+   *
    * @private
    *
    * @param {Number} x - The X position of the tile.
@@ -133,36 +138,35 @@ export class LightMap extends PIXI.ParticleContainer {
    */
   doesTileBlock(x, y) {
     return this.game.map.tiles[x][y].blockLight;
-  };
+  }
 
   /**
    * Function to calculate a new octant.
-   * 
+   *
    * @private
    */
   calculateOctant(position, row, start, end, lightsource, xx, xy, yx, yy, id) {
     this.tiles.push({
       x: position.x,
       y: position.y,
-      lightLevel: 0
+      lightLevel: 0,
     });
 
     let newStart = 0;
 
-    if(start < end) {
+    if (start < end) {
       return;
     }
 
     const radiusSquared = lightsource.radius * lightsource.radius;
 
-    for(let i = row; i < lightsource.radius + 1; i++) {
+    for (let i = row; i < lightsource.radius + 1; i++) {
       let dx = -i - 1;
       const dy = -i;
 
       let blocked = false;
 
-      while(dx <= 0) {
-
+      while (dx <= 0) {
         dx += 1;
 
         const X = position.x + dx * xx + dy * xy;
@@ -180,12 +184,17 @@ export class LightMap extends PIXI.ParticleContainer {
             if (dx * dx + dy * dy < radiusSquared) {
               const pos1 = new Vector2(X, Y);
               const pos2 = position;
-              const d = (pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y);
+              const d =
+                (pos1.x - pos2.x) * (pos1.x - pos2.x) +
+                (pos1.y - pos2.y) * (pos1.y - pos2.y);
 
               this.tiles.push({
                 x: X,
                 y: Y,
-                lightLevel: (lightsource.gradient === false) ? 1 : (1 - (d / (lightsource.radius * lightsource.radius)))
+                lightLevel:
+                  lightsource.gradient === false
+                    ? 1
+                    : 1 - d / (lightsource.radius * lightsource.radius),
               });
             }
 
@@ -200,7 +209,18 @@ export class LightMap extends PIXI.ParticleContainer {
             } else {
               if (this.doesTileBlock(X, Y) && i < lightsource.radius) {
                 blocked = true;
-                this.calculateOctant(position, i + 1, start, lSlope, lightsource, xx, xy, yx, yy, id + 1);
+                this.calculateOctant(
+                  position,
+                  i + 1,
+                  start,
+                  lSlope,
+                  lightsource,
+                  xx,
+                  xy,
+                  yx,
+                  yy,
+                  id + 1,
+                );
 
                 newStart = rSlope;
               }
@@ -213,32 +233,32 @@ export class LightMap extends PIXI.ParticleContainer {
         break;
       }
     }
-  };
+  }
 
   /**
    * Sets flag lit to false on all tiles within radius of position specified.
-   * 
+   *
    * @private
    *
    * @return {Array} An empty array.
    */
   clear() {
-	let i = this.tiles.length;
-	
-    while(i--) {
+    let i = this.tiles.length;
+
+    while (i--) {
       this.tiles[i].lightLevel = 0;
     }
 
-	const o = this.tiles;
-	
+    const o = this.tiles;
+
     this.tiles = [];
-	
-	return o;
-  };
+
+    return o;
+  }
 
   /**
    * Calculate the new lightning from this lightsource.
-   * 
+   *
    * @private
    *
    * @param {LightSource} lightSource - The lightsource that is being calculated.
@@ -247,17 +267,27 @@ export class LightMap extends PIXI.ParticleContainer {
    * @return {Array} An array containing all tiles.
    */
   calculate(lightSource, position) {
-    for(let i = 0; i < 8; i++) {
-      this.calculateOctant(position, 1, 1.0, 0.0, lightSource,
-        this.mult[0][i], this.mult[1][i], this.mult[2][i], this.mult[3][i], 0);
+    for (let i = 0; i < 8; i++) {
+      this.calculateOctant(
+        position,
+        1,
+        1.0,
+        0.0,
+        lightSource,
+        this.mult[0][i],
+        this.mult[1][i],
+        this.mult[2][i],
+        this.mult[3][i],
+        0,
+      );
     }
 
     this.tiles.push({
       x: position.x,
       y: position.y,
-      lightLevel: 1
+      lightLevel: 1,
     });
 
     return this.tiles;
-  };
-};
+  }
+}

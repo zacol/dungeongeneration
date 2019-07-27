@@ -1,6 +1,6 @@
 /**
  * A component that tells if the entity is passable or not.
- * 
+ *
  * @param {Boolean} collide - True or false depending on if it should collide with other entities.
  */
 export class Collide {

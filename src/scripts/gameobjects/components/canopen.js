@@ -2,7 +2,7 @@ import { Event } from '../../input/event.js';
 
 /**
  * An component that tells the system that this entity can be opened by another entity.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  * @param {Entity} entity - Reference to the entity that has this component.
  */

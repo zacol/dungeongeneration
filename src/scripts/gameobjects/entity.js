@@ -46,10 +46,10 @@ export class Entity {
   }
 
   /**
-	 * Function that gets called when this entity is in a scheduler and it is his turn.
-	 * 
+   * Function that gets called when this entity is in a scheduler and it is his turn.
+   *
    * @public
-	 */
+   */
   act() {
     if (this.hasComponent('statusEffectComponent')) {
       this.game.staticSystems.statusEffectsSystem.handleSingleEntity(this);
@@ -67,73 +67,73 @@ export class Entity {
   }
 
   /**
-	 * A function that returns the speed of this entity.
-   * 
-	 * @public
-	 *
-	 * @return {Number} The speed of this entity.
-	 */
+   * A function that returns the speed of this entity.
+   *
+   * @public
+   *
+   * @return {Number} The speed of this entity.
+   */
   getSpeed() {
     return this.speed;
   }
 
   /**
-	 * Check whether this entity has a certain component.
-   * 
-	 * @public
-	 *
-	 * @param {String} name - The name of the component.
-	 *
-	 * @return {Boolean} True when the entity has the component, false when it doesn't have the component.
-	 */
+   * Check whether this entity has a certain component.
+   *
+   * @public
+   *
+   * @param {String} name - The name of the component.
+   *
+   * @return {Boolean} True when the entity has the component, false when it doesn't have the component.
+   */
   hasComponent(name) {
     return this.components[name] !== undefined;
   }
 
   /**
-	 * Get a certain component on this entity.
-   * 
-	 * @public
-	 *
-	 * @param {String} name - The name of the component.
-	 *
-	 * @return {Object} The component that this entity has.
-	 */
+   * Get a certain component on this entity.
+   *
+   * @public
+   *
+   * @param {String} name - The name of the component.
+   *
+   * @return {Object} The component that this entity has.
+   */
   getComponent(name) {
     return this.components[name];
   }
 
   /**
-	 * Add an existing component to this entity.
-   * 
-	 * @public
-	 *
-	 * @param {Object} component - The component that is getting added to this entity.
-	 */
+   * Add an existing component to this entity.
+   *
+   * @public
+   *
+   * @param {Object} component - The component that is getting added to this entity.
+   */
   addComponent(component) {
     this.components[component.name] = component;
   }
 
   /**
-	 * Remove a component from this entity.
-   * 
-	 * @public
-	 *
-	 * @param {Object} component - The component that is getting removed from this entity.
-	 */
+   * Remove a component from this entity.
+   *
+   * @public
+   *
+   * @param {Object} component - The component that is getting removed from this entity.
+   */
   removeComponent(component) {
     this.components[component.name] = undefined;
   }
 
   // TODO: This function isn't really supposed to be here, but I also don't want to give every status effect a reference to the game to access the systems...
-	/**
-	 * Function to remove a status effect from this entity.
-   * 
-	 * @public
-	 *
-	 * @param {Object} statusEffect - The status effect that is being removed.
-	 *
-	 * @return {Boolean} Returns true when the status effect is removed, returns false when not.
+  /**
+   * Function to remove a status effect from this entity.
+   *
+   * @public
+   *
+   * @param {Object} statusEffect - The status effect that is being removed.
+   *
+   * @return {Boolean} Returns true when the status effect is removed, returns false when not.
    */
   removeStatusEffect(statusEffect) {
     return this.game.staticSystems.statusEffectsSystem.removeStatusEffect(

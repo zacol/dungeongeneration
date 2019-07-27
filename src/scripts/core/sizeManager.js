@@ -1,6 +1,6 @@
 /**
  * The size manager handles the scale and resizing of the canvas object.
- * 
+ *
  * @param {Game} game - Reference to the current game object.
  */
 export class SizeManager {

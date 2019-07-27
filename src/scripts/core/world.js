@@ -3,7 +3,7 @@ import { Vector2 } from '../geometry/vector2.js';
 
 /**
  * The World object holds all objects that are in the game world, entities, the map etc. They all move according to the camera.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  *
  * @extends PIXI.Container

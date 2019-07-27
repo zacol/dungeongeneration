@@ -13,7 +13,7 @@ export class StatusEffectsSystem {
 
   /**
    * Performs the needed operations for this specific system on one entity.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -30,7 +30,7 @@ export class StatusEffectsSystem {
 
   /**
    * Function to return every status effect currently on an entity.
-   * 
+   *
    * @protected
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -45,7 +45,7 @@ export class StatusEffectsSystem {
 
   /**
    * Function to add a new status effect to this entity.
-   * 
+   *
    * @protected
    *
    * @param {Entity} entity - The entity that needs a new status effect.
@@ -85,7 +85,7 @@ export class StatusEffectsSystem {
 
   /**
    * Function to remove a status effect from this entity.
-   * 
+   *
    * @protected
    *
    * @param {Entity} entity - The entity that needs a status effect to be removed.
@@ -106,4 +106,4 @@ export class StatusEffectsSystem {
 
     return true;
   }
-};
+}

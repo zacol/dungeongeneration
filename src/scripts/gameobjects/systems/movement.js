@@ -10,10 +10,10 @@ export class Movement {
      */
     this.game = game;
   }
-  
+
   /**
    * Performs the needed operations for this specific system on one entity.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -46,7 +46,7 @@ export class Movement {
   /**
    * Changes the direction of a sprite based on it's new position.
    * This way a sprite can face left or right based on it's movement.
-   * 
+   *
    * @private
    *
    * @param {Entity} entity - The entity that is being processed by this system.
@@ -66,7 +66,7 @@ export class Movement {
 
   /**
    * Function that gets called when an entity wants to move.
-   * 
+   *
    * @private
    *
    * @param {Entity} entity - The entity that is being checked against the map.
@@ -124,4 +124,4 @@ export class Movement {
     // Function made it all the way down here, that means the entity is able to move to the new position.
     return true;
   }
-};
+}

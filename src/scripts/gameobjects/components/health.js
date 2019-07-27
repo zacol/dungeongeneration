@@ -1,6 +1,6 @@
 /**
  * The health component is responsible for managing the health.
- * 
+ *
  * @param {Number} maxHealth - The new and maximum health of the entity.
  */
 export class Health {

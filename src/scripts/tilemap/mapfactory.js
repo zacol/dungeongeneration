@@ -4,7 +4,7 @@ import { Utils } from '../core/utils.js';
 
 /**
  * The object that is responsible for generating rooms and corridors.
- * 
+ *
  * @param {Game} game - Reference to the current game object.
  */
 export class MapFactory {

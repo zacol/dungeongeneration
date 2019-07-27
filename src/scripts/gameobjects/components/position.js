@@ -1,6 +1,6 @@
 /**
  * The position component holds x and y position of the entity.
- * 
+ *
  * @param {Vector2} position - The position object of this entity.
  */
 export class Position {

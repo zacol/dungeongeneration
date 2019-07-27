@@ -1,6 +1,6 @@
 /**
  * The system that handles combat.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  */
 export class Combat {

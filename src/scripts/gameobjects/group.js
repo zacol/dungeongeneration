@@ -22,7 +22,7 @@ export class Group extends PIXI.Container {
 
   /**
    * Function to add a new entity to this group.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - A reference to entity being added.
@@ -50,7 +50,7 @@ export class Group extends PIXI.Container {
 
   /**
    * Function to remove an entity from this group.
-   * 
+   *
    * @public
    *
    * @param {Entity} entity - A reference to entity being removed.

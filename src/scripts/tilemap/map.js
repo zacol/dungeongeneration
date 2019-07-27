@@ -74,7 +74,7 @@ export class Map extends PIXI.Container {
 
   /**
    * Initialize the layout of the map, filling it with empty tiles.
-   * 
+   *
    * @private
    */
   initialize() {
@@ -114,7 +114,7 @@ export class Map extends PIXI.Container {
 
   /**
    * Function to get a tile at a position.
-   * 
+   *
    * @public
    *
    * @param {Vector2} position - The position that is being requested.
@@ -133,7 +133,7 @@ export class Map extends PIXI.Container {
 
   /**
    * Function to check if one position is inside the maps boundary.
-   * 
+   *
    * @public
    *
    * @param {Vector2} position - The position that is being requested.
@@ -151,7 +151,7 @@ export class Map extends PIXI.Container {
 
   /**
    * Function that returns an array with only the tiletypes of every position. Used for EasyStar Pathfinding.
-   * 
+   *
    * @public
    *
    * @return {Array} Array with only the tiletypes of every position on the map.
@@ -172,7 +172,7 @@ export class Map extends PIXI.Container {
 
   /**
    * Check if a single room overlaps a room that is already on the map and if it's inside the maps boundaries.
-   * 
+   *
    * @public
    *
    * @param {Room} room - The room object that has to be checked.

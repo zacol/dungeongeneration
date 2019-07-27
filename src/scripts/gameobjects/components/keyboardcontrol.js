@@ -2,7 +2,7 @@ import { Vector2 } from '../../geometry/vector2.js';
 
 /**
  * An component that tells the system that this entity can be controlled with the keyboard.
- * 
+ *
  * @param {Game} game - Reference to the current game object.
  * @param {Entity} entity - Reference to the entity that has this component.
  * @param {Object} controls - Associative array with every control that this entity uses.

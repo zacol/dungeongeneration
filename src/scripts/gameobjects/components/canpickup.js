@@ -2,7 +2,7 @@ import { Event } from '../../input/event.js';
 
 /**
  * An component that tells the system that this entity can be picked up.
- * 
+ *
  * @param {Game} game - Reference to the currently running game.
  * @param {Array} canPickUpTypes - Array of entity types that can pick up this item.
  */
