@@ -1,44 +1,50 @@
+import {
+  Container,
+  Graphics,
+  Text,
+} from 'pixi.js';
+
 /**
  * The TooltipElement displays information when user hovers the pointer over entity.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class TooltipElement extends PIXI.Container {
+export class TooltipElement extends Container {
   constructor() {
     super();
 
     /**
-     * @property {PIXI.Graphics} background - The background of the tooltip.
+     * @property {Graphics} background - The background of the tooltip.
      */
     this.background = null;
 
     /**
-     * @property {PIXI.Text} title - The title of the tooltip.
+     * @property {Text} title - The title of the tooltip.
      */
     this.title = null;
 
     /**
-     * @property {PIXI.Text} type - The type of entity.
+     * @property {Text} type - The type of entity.
      */
     this.type = null;
 
     /**
-     * @property {PIXI.Text} description - The description of entity.
+     * @property {Text} description - The description of entity.
      */
     this.description = null;
   }
 
   /**
-   * Initialize the tooltip and create the PIXI.Text objects for later use.
+   * Initialize the tooltip and create the Text objects for later use.
    *
    * @public
    */
   initialize() {
-    this.background = new PIXI.Graphics();
+    this.background = new Graphics();
 
     this.addChild(this.background);
 
-    this.title = new PIXI.Text('', {
+    this.title = new Text('', {
       fontFamily: 'Courier New',
       fontSize: 12,
       fontWeight: 700,
@@ -51,7 +57,7 @@ export class TooltipElement extends PIXI.Container {
 
     this.addChild(this.title);
 
-    this.type = new PIXI.Text('', {
+    this.type = new Text('', {
       fontFamily: 'Courier New',
       fontSize: 12,
       fill: '#ffffff',
@@ -63,7 +69,7 @@ export class TooltipElement extends PIXI.Container {
 
     this.addChild(this.type);
 
-    this.description = new PIXI.Text('', {
+    this.description = new Text('', {
       fontFamily: 'Courier New',
       fontSize: 12,
       fill: '#b4b4b4',

@@ -42,5 +42,8 @@
     "pretty": "prettier --write \"./src/scripts/**/*.{js,json}\"",
     "generate-docs": "jsdoc -r ./src/scripts -d ./docs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pixi.js": "^5.1.0"
+  }
 }

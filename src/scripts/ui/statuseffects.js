@@ -1,11 +1,18 @@
+import {
+  Container,
+  Sprite,
+  Text,
+  Texture,
+} from 'pixi.js';
+
 import { Vector2 } from '../geometry/vector2.js';
 
 /**
  * The StatusEffects holds all informations about effects that affect player.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class StatusEffects extends PIXI.Container {
+export class StatusEffects extends Container {
   constructor() {
     super();
 
@@ -29,21 +36,21 @@ export class StatusEffects extends PIXI.Container {
     const basePosition = new Vector2(15, 200);
 
     for (let i = 0; i < this.maxEffects; i++) {
-      const effectContainer = new PIXI.Container();
+      const effectContainer = new Container();
 
-      const texture = PIXI.Texture.from('status_empty.png');
+      const texture = Texture.from('status_empty.png');
 
       const statusEffectPosition = new Vector2(0, i * (texture.height + 5));
       const newPosition = statusEffectPosition.combine(basePosition);
 
-      const statusEffect = new PIXI.Sprite(texture);
+      const statusEffect = new Sprite(texture);
 
       statusEffect.position.x = newPosition.x;
       statusEffect.position.y = newPosition.y;
 
       effectContainer.addChild(statusEffect);
 
-      const textObject = new PIXI.Text('0', {
+      const textObject = new Text('0', {
         fontFamily: 'Courier New',
         fontSize: 12,
         fontWeight: 700,
@@ -88,7 +95,7 @@ export class StatusEffects extends PIXI.Container {
       const statusEffect = effectContainer.getChildAt(0);
       const textObject = effectContainer.getChildAt(1);
 
-      statusEffect.texture = PIXI.Texture.from(
+      statusEffect.texture = Texture.from(
         `status_${statusEffectComponent.statusEffects[i].name}.png`,
       );
       textObject.text = statusEffectComponent.statusEffects[i].turnsLeft;

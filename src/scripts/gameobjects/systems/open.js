@@ -1,3 +1,5 @@
+import { Texture } from 'pixi.js';
+
 /**
  * The Open system handles opening entities and making sure the collision is turned of after they are opened.
  *
@@ -29,7 +31,7 @@ export class Open {
 
       entity.textureName = entity.textureName.replace('closed', 'open');
 
-      entity.sprite.texture = PIXI.Texture.from(entity.textureName);
+      entity.sprite.texture = Texture.from(entity.textureName);
 
       collideComponent.collide = false;
 

@@ -1,3 +1,5 @@
+import { Texture } from 'pixi.js';
+
 /**
  * The movement system is responsible for handling collision between entities and moving them.
  *
@@ -61,7 +63,7 @@ export class Movement {
       entity.textureName = entity.textureName.replace('right', 'left');
     }
 
-    entity.sprite.texture = PIXI.Texture.from(entity.textureName);
+    entity.sprite.texture = Texture.from(entity.textureName);
   }
 
   /**

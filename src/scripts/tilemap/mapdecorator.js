@@ -1,3 +1,5 @@
+import { Texture } from 'pixi.js';
+
 import { PropFactory } from '../factories/propfactory.js';
 import { DecorationFactory } from '../factories/decorationfactory.js';
 import { EnemyFactory } from '../factories/enemyfactory.js';
@@ -207,7 +209,7 @@ export class MapDecorator {
 
               const textureName = index + '_' + rand + '.png';
 
-              map.pixitiles[x][y].texture = PIXI.Texture.from(textureName);
+              map.pixitiles[x][y].texture = Texture.from(textureName);
 
               break;
             }
@@ -217,7 +219,7 @@ export class MapDecorator {
 
           const texturename = 'floor_' + random + '.png';
 
-          this.game.map.pixitiles[x][y].texture = PIXI.Texture.from(
+          this.game.map.pixitiles[x][y].texture = Texture.from(
             texturename,
           );
         }
@@ -333,7 +335,7 @@ export class MapDecorator {
     if (orientation === true) {
       doorEntity.textureName = 'door_vertical_closed.png';
 
-      doorEntity.sprite.texture = PIXI.Texture.from(
+      doorEntity.sprite.texture = Texture.from(
         'door_vertical_closed.png',
       );
     }

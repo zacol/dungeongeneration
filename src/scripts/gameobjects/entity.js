@@ -1,3 +1,5 @@
+import { Sprite } from 'pixi.js';
+
 /**
  * A single entity in the game world.
  *
@@ -35,9 +37,9 @@ export class Entity {
     this.textureName = sprite;
 
     /**
-     * @property {PIXI.Sprite} sprite - The sprite of this entity.
+     * @property {Sprite} sprite - The sprite of this entity.
      */
-    this.sprite = PIXI.Sprite.from(sprite);
+    this.sprite = Sprite.from(sprite);
 
     /**
      * @property {Object} components - An object filled with all the components this entity has.

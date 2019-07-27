@@ -1,11 +1,18 @@
+import {
+  Container,
+  Point,
+} from 'pixi.js';
+
 import { Entity } from '../gameobjects/entity.js';
 
 /**
  * The object that holds multiple entities and is able to search them.
  *
  * @param {Game} game - A reference to the current game object
+ * 
+ * @extends Container
  */
-export class Group extends PIXI.Container {
+export class Group extends Container {
   constructor(game) {
     super();
 
@@ -42,7 +49,7 @@ export class Group extends PIXI.Container {
         y: positionComponent.position.y * 16,
       };
 
-      entity.sprite.position = new PIXI.Point(newPosition.x, newPosition.y);
+      entity.sprite.position = new Point(newPosition.x, newPosition.y);
     }
 
     this.entities.push(entity);

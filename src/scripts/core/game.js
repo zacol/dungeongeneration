@@ -1,3 +1,11 @@
+import {
+  autoDetectRenderer,
+  Container,
+  Loader,
+  SCALE_MODES,
+  settings,
+} from 'pixi.js';
+
 import { UI } from '../ui/ui.js';
 import { World } from './world.js';
 import { SizeManager } from './sizemanager.js';
@@ -124,9 +132,9 @@ export class Game {
    * @private
    */
   load() {
-    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
-    const loader = PIXI.Loader.shared;
+    const loader = Loader.shared;
 
     loader.add([
       'assets/tilesets/dungeon.json',
@@ -151,11 +159,11 @@ export class Game {
       return;
     }
 
-    this.stage = new PIXI.Container();
+    this.stage = new Container();
 
     this.sizeManager = new SizeManager(this);
 
-    this.renderer = PIXI.autoDetectRenderer({
+    this.renderer = autoDetectRenderer({
       width: this.sizeManager.width,
       height: this.sizeManager.height,
       transparent: true,

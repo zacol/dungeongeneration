@@ -1,9 +1,14 @@
+import {
+  Container,
+  Text,
+} from 'pixi.js';
+
 /**
  * The TextLog holds and stores all messages that entities send to it.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class TextLog extends PIXI.Container {
+export class TextLog extends Container {
   constructor() {
     super();
 
@@ -39,13 +44,13 @@ export class TextLog extends PIXI.Container {
   }
 
   /**
-   * Initialize the textlog and create the PIXI.Text objects for later use.
+   * Initialize the textlog and create the Text objects for later use.
    *
    * @public
    */
   initialize() {
     for (let i = 0; i < this.maxMessages; i++) {
-      const textObject = new PIXI.Text('', {
+      const textObject = new Text('', {
         fontFamily: this.font,
         fontSize: this.fontSize,
         fill: this.color,

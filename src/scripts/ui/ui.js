@@ -1,3 +1,9 @@
+import {
+  Container,
+  Point,
+  Sprite,
+} from 'pixi.js';
+
 import { TextLog } from '../ui/textlog.js';
 import { QuickslotBar } from '../ui/quickslotbar.js';
 import { SpellBar } from '../ui/spellbar.js';
@@ -8,9 +14,9 @@ import { Vector2 } from '../geometry/vector2.js';
 /**
  * The UI object holds all UI elements.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class UI extends PIXI.Container {
+export class UI extends Container {
   /**
    * @param {Game} game - Reference to the currently running game.
    */
@@ -48,12 +54,12 @@ export class UI extends PIXI.Container {
     this.statusEffects = null;
 
     /**
-     * @property {PIXI.Sprite} mousePointer - Reference to the mouse pointer object.
+     * @property {Sprite} mousePointer - Reference to the mouse pointer object.
      */
     this.mousePointer = null;
 
     /**
-     * @property {PIXI.Container} tooltip - Reference to the tooltip object.
+     * @property {Container} tooltip - Reference to the tooltip object.
      */
     this.tooltip = null;
 
@@ -149,8 +155,8 @@ export class UI extends PIXI.Container {
    * @private
    */
   initializeMousePointer() {
-    this.mousePointer = PIXI.Sprite.from('mousepointer.png');
-    this.mousePointer.scale = new PIXI.Point(
+    this.mousePointer = Sprite.from('mousepointer.png');
+    this.mousePointer.scale = new Point(
       this.game.settings.zoom,
       this.game.settings.zoom,
     );
@@ -216,7 +222,7 @@ export class UI extends PIXI.Container {
     }
 
     this.mousePointer.visible = true;
-    this.mousePointer.position = new PIXI.Point(
+    this.mousePointer.position = new Point(
       tileXRel * tilesize - cameraXOffset,
       tileYRel * tilesize - cameraYOffset,
     );
@@ -237,7 +243,7 @@ export class UI extends PIXI.Container {
         tooltipComponent.description,
       );
 
-      this.tooltip.position = new PIXI.Point(
+      this.tooltip.position = new Point(
         mousedata.data.global.x,
         mousedata.data.global.y,
       );

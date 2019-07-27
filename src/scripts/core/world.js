@@ -1,3 +1,8 @@
+import {
+  Container,
+  Point,
+} from 'pixi.js';
+
 import { Camera } from './camera.js';
 import { Vector2 } from '../geometry/vector2.js';
 
@@ -6,9 +11,9 @@ import { Vector2 } from '../geometry/vector2.js';
  *
  * @param {Game} game - Reference to the currently running game.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class World extends PIXI.Container {
+export class World extends Container {
   constructor(game) {
     super();
 
@@ -34,7 +39,7 @@ export class World extends PIXI.Container {
     this.camera = new Camera(this.game, new Vector2(0, 0));
 
     //Scale the entire world
-    this.scale = new PIXI.Point(
+    this.scale = new Point(
       this.game.settings.zoom,
       this.game.settings.zoom,
     );
@@ -51,7 +56,7 @@ export class World extends PIXI.Container {
   update() {
     this.camera.update();
 
-    this.position = new PIXI.Point(
+    this.position = new Point(
       -this.camera.position.x,
       -this.camera.position.y,
     );

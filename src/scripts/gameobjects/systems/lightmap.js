@@ -1,11 +1,18 @@
+import {
+  ParticleContainer,
+  Sprite,
+} from 'pixi.js';
+
 import { Vector2 } from '../../geometry/vector2.js';
 
 /**
  * The lightmap system recalculates the lightmap and makes sure that explored areas are visible.
  *
  * @param {Game} game - Reference to the currently running game.
+ * 
+ * @extends ParticleContainer
  */
-export class LightMap extends PIXI.ParticleContainer {
+export class LightMap extends ParticleContainer {
   constructor(game) {
     super(3000, {
       alpha: true,
@@ -59,7 +66,7 @@ export class LightMap extends PIXI.ParticleContainer {
       this.pixitiles[x] = [];
 
       for (let y = 0; y < this.game.map.settings.tilesY; y++) {
-        this.pixitiles[x][y] = PIXI.Sprite.from('void.png');
+        this.pixitiles[x][y] = Sprite.from('void.png');
 
         this.pixitiles[x][y].position.x = x * this.game.map.settings.tileSize;
         this.pixitiles[x][y].position.y = y * this.game.map.settings.tileSize;

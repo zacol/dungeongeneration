@@ -1,11 +1,18 @@
+import {
+  Container,
+  Sprite,
+} from 'pixi.js';
+
 import { Tile } from './tile.js';
 
 /**
  * The object that holds all the rooms, corridors and tiles.
  *
  * @param {Game} game - Reference to the current game object.
+ * 
+ * @extends Container
  */
-export class Map extends PIXI.Container {
+export class Map extends Container {
   constructor(game) {
     super();
 
@@ -100,7 +107,7 @@ export class Map extends PIXI.Container {
       for (let y = 0; y < this.settings.tilesY; y++) {
         this.tiles[x][y] = new Tile(0, true, 0, 0);
 
-        this.pixitiles[x][y] = PIXI.Sprite.from('void.png');
+        this.pixitiles[x][y] = Sprite.from('void.png');
 
         this.pixitiles[x][y].position.x = x * this.settings.tileSize;
         this.pixitiles[x][y].position.y = y * this.settings.tileSize;

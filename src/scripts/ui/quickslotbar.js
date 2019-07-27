@@ -1,11 +1,19 @@
+import {
+  Container,
+  Point,
+  Sprite,
+  Text,
+  Texture,
+} from 'pixi.js';
+
 import { Vector2 } from '../geometry/vector2.js';
 
 /**
  * The Quickslot Bar holds all quickslots and manages the rendering of this UI element.
  *
- * @extends PIXI.Container
+ * @extends Container
  */
-export class QuickslotBar extends PIXI.Container {
+export class QuickslotBar extends Container {
   /**
    * @param {Game} game - Reference to the currently running game.
    */
@@ -38,18 +46,18 @@ export class QuickslotBar extends PIXI.Container {
       const quickslotPosition = new Vector2(i * 44, 0);
       const newPosition = quickslotPosition.combine(basePosition);
 
-      const texture = PIXI.Texture.from('itemslot.png');
+      const texture = Texture.from('itemslot.png');
 
-      const quickslot = new PIXI.Sprite(texture);
+      const quickslot = new Sprite(texture);
 
       quickslot.position.x = newPosition.x;
       quickslot.position.y = newPosition.y;
 
-      quickslot.scale = new PIXI.Point(3, 3);
+      quickslot.scale = new Point(3, 3);
 
       this.addChild(quickslot);
 
-      const textObject = new PIXI.Text(`${i + 1}`, {
+      const textObject = new Text(`${i + 1}`, {
         fontFamily: 'Courier New',
         fontSize: 12,
         fill: '#606060',
@@ -77,16 +85,16 @@ export class QuickslotBar extends PIXI.Container {
     const itemPosition = new Vector2(nextSlot * 44 - 1, -2);
     const newPosition = itemPosition.combine(basePosition);
 
-    const texture = PIXI.Texture.from(entity.textureName);
+    const texture = Texture.from(entity.textureName);
 
-    const item = new PIXI.Sprite(texture);
+    const item = new Sprite(texture);
 
     item.position.x = newPosition.x;
     item.position.y = newPosition.y;
 
     item.alpha = 0.5;
 
-    item.scale = new PIXI.Point(3, 3);
+    item.scale = new Point(3, 3);
 
     this.addChild(item);
   }
