@@ -149,7 +149,7 @@ export class UI extends PIXI.Container {
    * @private
    */
   initializeMousePointer() {
-    this.mousePointer = PIXI.Sprite.fromFrame('mousepointer.png');
+    this.mousePointer = PIXI.Sprite.from('mousepointer.png');
     this.mousePointer.scale = new PIXI.Point(
       this.game.settings.zoom,
       this.game.settings.zoom,

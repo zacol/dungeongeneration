@@ -59,7 +59,7 @@ export class LightMap extends PIXI.ParticleContainer {
       this.pixitiles[x] = [];
 
       for (let y = 0; y < this.game.map.settings.tilesY; y++) {
-        this.pixitiles[x][y] = PIXI.Sprite.fromFrame('void.png');
+        this.pixitiles[x][y] = PIXI.Sprite.from('void.png');
 
         this.pixitiles[x][y].position.x = x * this.game.map.settings.tileSize;
         this.pixitiles[x][y].position.y = y * this.game.map.settings.tileSize;

@@ -61,7 +61,7 @@ export class Movement {
       entity.textureName = entity.textureName.replace('right', 'left');
     }
 
-    entity.sprite.texture = PIXI.Texture.fromFrame(entity.textureName);
+    entity.sprite.texture = PIXI.Texture.from(entity.textureName);
   }
 
   /**

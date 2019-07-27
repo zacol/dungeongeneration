@@ -29,7 +29,7 @@ export class Open {
 
       entity.textureName = entity.textureName.replace('closed', 'open');
 
-      entity.sprite.texture = PIXI.Texture.fromFrame(entity.textureName);
+      entity.sprite.texture = PIXI.Texture.from(entity.textureName);
 
       collideComponent.collide = false;
 

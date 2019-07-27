@@ -39,7 +39,9 @@ export class TooltipElement extends PIXI.Container {
     this.addChild(this.background);
 
     this.title = new PIXI.Text('', {
-      font: 'bold 12px Courier New',
+      fontFamily: 'Courier New',
+      fontSize: 12,
+      fontWeight: 700,
       fill: '#ffffff',
       wordWrap: true,
       wordWrapWidth: 150,
@@ -50,7 +52,8 @@ export class TooltipElement extends PIXI.Container {
     this.addChild(this.title);
 
     this.type = new PIXI.Text('', {
-      font: '12px Courier New',
+      fontFamily: 'Courier New',
+      fontSize: 12,
       fill: '#ffffff',
       wordWrap: true,
       wordWrapWidth: 150,
@@ -61,7 +64,8 @@ export class TooltipElement extends PIXI.Container {
     this.addChild(this.type);
 
     this.description = new PIXI.Text('', {
-      font: '12px Courier New',
+      fontFamily: 'Courier New',
+      fontSize: 12,
       fill: '#b4b4b4',
       wordWrap: true,
       wordWrapWidth: 150,

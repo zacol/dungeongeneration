@@ -31,7 +31,7 @@ export class StatusEffects extends PIXI.Container {
     for (let i = 0; i < this.maxEffects; i++) {
       const effectContainer = new PIXI.Container();
 
-      const texture = PIXI.Texture.fromFrame('status_empty.png');
+      const texture = PIXI.Texture.from('status_empty.png');
 
       const statusEffectPosition = new Vector2(0, i * (texture.height + 5));
       const newPosition = statusEffectPosition.combine(basePosition);
@@ -44,9 +44,11 @@ export class StatusEffects extends PIXI.Container {
       effectContainer.addChild(statusEffect);
 
       const textObject = new PIXI.Text('0', {
-        font: 'bold 12px Courier New',
+        fontFamily: 'Courier New',
+        fontSize: 12,
+        fontWeight: 700,
         fill: '#ffffff',
-        align: 'left',
+        align: 'left'
       });
 
       const textPosition = newPosition.combine(
@@ -86,7 +88,7 @@ export class StatusEffects extends PIXI.Container {
       const statusEffect = effectContainer.getChildAt(0);
       const textObject = effectContainer.getChildAt(1);
 
-      statusEffect.texture = PIXI.Texture.fromFrame(
+      statusEffect.texture = PIXI.Texture.from(
         `status_${statusEffectComponent.statusEffects[i].name}.png`,
       );
       textObject.text = statusEffectComponent.statusEffects[i].turnsLeft;

@@ -37,7 +37,7 @@ export class Entity {
     /**
      * @property {PIXI.Sprite} sprite - The sprite of this entity.
      */
-    this.sprite = PIXI.Sprite.fromFrame(sprite);
+    this.sprite = PIXI.Sprite.from(sprite);
 
     /**
      * @property {Object} components - An object filled with all the components this entity has.

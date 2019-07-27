@@ -46,9 +46,10 @@ export class TextLog extends PIXI.Container {
   initialize() {
     for (let i = 0; i < this.maxMessages; i++) {
       const textObject = new PIXI.Text('', {
-        font: this.fontSize + 'px ' + this.font,
+        fontFamily: this.font,
+        fontSize: this.fontSize,
         fill: this.color,
-        align: 'left',
+        align: 'left'
       });
 
       textObject.position.x = 15;

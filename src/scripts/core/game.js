@@ -124,9 +124,9 @@ export class Game {
    * @private
    */
   load() {
-    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-    const loader = PIXI.loader;
+    const loader = PIXI.Loader.shared;
 
     loader.add([
       'assets/tilesets/dungeon.json',
@@ -155,10 +155,11 @@ export class Game {
 
     this.sizeManager = new SizeManager(this);
 
-    this.renderer = PIXI.autoDetectRenderer(
-      this.sizeManager.width,
-      this.sizeManager.height,
-    );
+    this.renderer = PIXI.autoDetectRenderer({
+      width: this.sizeManager.width,
+      height: this.sizeManager.height,
+      transparent: true,
+    });
 
     document.body.appendChild(this.renderer.view);
 

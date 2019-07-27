@@ -38,7 +38,7 @@ export class SpellBar extends PIXI.Container {
       const quickslotPosition = new Vector2(i * 44, 0);
       const newPosition = quickslotPosition.combine(basePosition);
 
-      const texture = PIXI.Texture.fromFrame('itemslot.png');
+      const texture = PIXI.Texture.from('itemslot.png');
 
       const quickslot = new PIXI.Sprite(texture);
 
@@ -49,10 +49,11 @@ export class SpellBar extends PIXI.Container {
 
       this.addChild(quickslot);
 
-      const textObject = new PIXI.Text('' + (i + 1), {
-        font: '10px Courier New',
+      const textObject = new PIXI.Text(`${i + 1}`, {
+        fontFamily: 'Courier New',
+        fontSize: 12,
         fill: '#606060',
-        align: 'left',
+        align: 'left'
       });
 
       const textPosition = newPosition.combine(new Vector2(30, 30));

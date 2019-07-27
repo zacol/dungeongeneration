@@ -207,7 +207,7 @@ export class MapDecorator {
 
               const textureName = index + '_' + rand + '.png';
 
-              map.pixitiles[x][y].texture = PIXI.Texture.fromFrame(textureName);
+              map.pixitiles[x][y].texture = PIXI.Texture.from(textureName);
 
               break;
             }
@@ -217,7 +217,7 @@ export class MapDecorator {
 
           const texturename = 'floor_' + random + '.png';
 
-          this.game.map.pixitiles[x][y].texture = PIXI.Texture.fromFrame(
+          this.game.map.pixitiles[x][y].texture = PIXI.Texture.from(
             texturename,
           );
         }
@@ -333,7 +333,7 @@ export class MapDecorator {
     if (orientation === true) {
       doorEntity.textureName = 'door_vertical_closed.png';
 
-      doorEntity.sprite.texture = PIXI.Texture.fromFrame(
+      doorEntity.sprite.texture = PIXI.Texture.from(
         'door_vertical_closed.png',
       );
     }
