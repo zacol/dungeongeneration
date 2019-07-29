@@ -24,7 +24,7 @@ export class Open {
     const canOpenComponent = entity.getComponent('canOpen');
     const positionComponent = entity.getComponent('position');
     const collideComponent = entity.getComponent('collide');
-    const tooltipComponent = entity.getComponent('tooltip').Tooltip;
+    const tooltipComponent = entity.getComponent('tooltip');
 
     if (canOpenComponent.state !== 'open') {
       canOpenComponent.state = 'open';
